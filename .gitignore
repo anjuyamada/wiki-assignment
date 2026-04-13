@@ -2,6 +2,9 @@
 .RData
 .Rproj.user
 .DS_Store
-output/*.png
-output/*.csv
-output/*.txt
+
+data/*.gz
+data/*.json
+data/*.csv
+
+!data/README.md
