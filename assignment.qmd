@@ -1,0 +1,8 @@
+---
+title: "Instability as a Data Quality Issue in Wikipedia"
+format: html
+---
+
+## Introduction
+
+This report analyses instability in diversity-related Wikipedia pages.
