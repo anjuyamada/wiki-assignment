@@ -1,35 +1,34 @@
 ---
-  title: "Instability as a Data Quality Issue in Wikipedia"
+title: "Instability as a Data Quality Issue in Wikipedia"
 subtitle: "*Evidence from Diversity-Related Topics in English Wikipedia*"
 license: "CC BY"
-bibliography: references.bib
-date: 2026-00-00
+date: 2026-01-01
 date-format: "DD.MM.YYYY"
 date-modified: last-modified
 keywords:
   - Wikipedia
-- data quality
-- instability
-- diversity
-- edit conflict
-- burstiness
+  - data quality
+  - instability
+  - diversity
+  - edit conflict
+  - burstiness
 author:
   - name: Anju Yamada
 format:
   html:
-  toc: true
-toc-location: left
-toc-depth: 3
-toc-title: "Contents"
-embed-resources: true
-code-fold: true
-code-tools: true
-code-summary: "Show code"
-theme: cosmo
-fig-width: 10
-fig-height: 7
-fig-dpi: 300
-number-sections: true
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    toc-title: "Contents"
+    embed-resources: true
+    code-fold: true
+    code-tools: true
+    code-summary: "Show code"
+    theme: cosmo
+    fig-width: 10
+    fig-height: 7
+    fig-dpi: 300
+    number-sections: true
 ---
 ## Introduction
   
@@ -86,6 +85,8 @@ library(readr)
 library(knitr)
 library(kableExtra)
 ```
+
+```{r}
 # -------------------------
 # Output folders
 # -------------------------
@@ -120,6 +121,7 @@ save_plot_png <- function(plot_obj, filename, width = 8, height = 5, dpi = 300) 
     dpi = dpi
   )
 }
+```
 
 ```{r, warning=FALSE, message=FALSE}
 
@@ -129,15 +131,27 @@ save_plot_png <- function(plot_obj, filename, width = 8, height = 5, dpi = 300) 
 
 n_read <- 50000
 
-con_pageviews <- textConnection(readLines(gzfile("page_views.json.gz"), n = n_read))
+pageviews_path <- file.path("Data", "page_views.json.gz")
+pageinfo_path  <- file.path("Data", "page_info.json.gz")
+enwiki_path    <- file.path("Data", "enwiki.json.gz")
+
+print(pageviews_path)
+print(pageinfo_path)
+print(enwiki_path)
+
+stopifnot(file.exists(pageviews_path))
+stopifnot(file.exists(pageinfo_path))
+stopifnot(file.exists(enwiki_path))
+
+con_pageviews <- textConnection(readLines(gzfile(pageviews_path), n = n_read))
 pageviews_sample <- stream_in(con_pageviews, verbose = FALSE)
 close(con_pageviews)
 
-con_pageinfo <- textConnection(readLines(gzfile("page_info.json.gz"), n = n_read))
+con_pageinfo <- textConnection(readLines(gzfile(pageinfo_path), n = n_read))
 pageinfo_sample <- stream_in(con_pageinfo, verbose = FALSE)
 close(con_pageinfo)
 
-con_enwiki <- textConnection(readLines(gzfile("enwiki.json.gz"), n = n_read))
+con_enwiki <- textConnection(readLines(gzfile(enwiki_path), n = n_read))
 enwiki_sample <- stream_in(con_enwiki, verbose = FALSE)
 close(con_enwiki)
 ```
@@ -408,7 +422,7 @@ save_plot_png(p_burst_day, "burst_day_rate_by_topic.png")
 p_burst_day
 ```
 
-```
+
 ```{r, warning=FALSE, message=FALSE}
 #| label: 06_hypothesis_tests_day
 
@@ -428,14 +442,16 @@ In other words, diversity-related pages appear more structurally bursty even tho
 
 We evaluate several mitigation strategies to assess whether data reliability can be improved once instability has been detected.
 
--revert-based filtering
--revert-based weighting
--topic/burst-based weighting
--event-day trimming
--combined mitigation
-```
-```{r, warning=FALSE, message=FALSE}
+- revert-based filtering
+- revert-based weighting
+- topic/burst-based weighting
+- event-day trimming
+- combined mitigation
+
+```{r}
 #| label: 07_mitigation_prep
+#| warning: false
+#| message: false
 
 revert_threshold <- quantile(page_instability$mean_reverted_share_day, 0.95, na.rm = TRUE)
 
@@ -463,6 +479,7 @@ daily_trimmed_page <- daily_trimmed %>%
   mutate(weight_combined = 1 / (1 + edit_burst))
 
 ```
+
 ```{r, warning=FALSE, message=FALSE}
 #| label: 07_mitigation_table
 #| tbl-cap: "Mitigation comparison across designs"
@@ -523,13 +540,16 @@ mitigation_compare <- bind_rows(
       .groups = "drop"
     )
 )
-save_table_csv(mitigation_compare_all, "mitigation_compare_all.csv")
+
+save_table_csv(mitigation_compare, "mitigation_compare.csv")
+
 mitigation_compare |>
   kable(digits = 3, caption = "Mitigation comparison across designs") |>
   kable_styling(full_width = FALSE)
 
 
 ```
+
 ```{r, warning=FALSE, message=FALSE}
 #| label: 07_mitigation_plot_burst
 #| fig-cap: "Mitigation comparison: burst-related instability"
@@ -621,8 +641,6 @@ From a data quality perspective, this matters because instability is not capture
 
 The mitigation analysis reinforces this interpretation. Revert-based mitigation helps with revert-related noise, but not with burst-related instability. Topic/burst-based weighting and event-day trimming each address different aspects of the problem. A combined strategy is therefore preferable when the goal is to improve data reliability without simply excluding controversial topics altogether.
 
-```
-sessionInfo()
 
 ## Software & Session Info {.appendix}
 
