@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
+margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
 margin-left:2em;
@@ -2653,24 +2654,21 @@ window.Quarto = {
 
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>Wikipedia is one of the most widely used knowledge infrastructures in the world. However, its content is not fixed. It is continuously updated, revised, and contested by editors. This dynamic character makes Wikipedia not only a source of information, but also a data system shaped by ongoing social processes. Early work comparing Wikipedia with traditional encyclopedias has shown that its accuracy can be comparable in many cases, while still varying across articles and topics <span class="citation" data-cites="giles2005">(<a href="#ref-giles2005" role="doc-biblioref"><strong>giles2005?</strong></a>)</span>.</p>
-<p>Prior research has examined the quality and reliability of Wikipedia articles, emphasizing the implications of its open and collaborative nature. Because Wikipedia allows a large number of contributors to continuously edit and revise content, article quality is inherently dynamic and subject to variation over time <span class="citation" data-cites="moas2023">(<a href="#ref-moas2023" role="doc-biblioref"><strong>moas2023?</strong></a>)</span>. In addition to textual characteristics, revision history and editing behavior have been identified as important indicators for evaluating article quality, reflecting the process through which content is produced and maintained <span class="citation" data-cites="raman2020 zeng2006">(<a href="#ref-raman2020" role="doc-biblioref"><strong>raman2020?</strong></a>; <a href="#ref-zeng2006" role="doc-biblioref"><strong>zeng2006?</strong></a>)</span>.</p>
-<p>At the same time, editing activity in Wikipedia is shaped by social interaction and conflict. Previous studies have shown that intense disagreements, often manifested as mutual reverts, characterize a subset of highly contested articles <span class="citation" data-cites="sumi2011">(<a href="#ref-sumi2011" role="doc-biblioref"><strong>sumi2011?</strong></a>)</span>. These findings suggest that certain topics may exhibit higher levels of revert-related instability, reflecting ongoing editorial contestation.</p>
-<p>In parallel, research on human dynamics demonstrates that activity is often temporally concentrated rather than evenly distributed. Human activity patterns have been shown to follow bursty dynamics, where short periods of intense activity are followed by longer periods of inactivity <span class="citation" data-cites="barabasi2005">(<a href="#ref-barabasi2005" role="doc-biblioref"><strong>barabasi2005?</strong></a>)</span>. Editing behavior in Wikipedia exhibits similar bursty patterns, where periods of intense activity are followed by relative inactivity <span class="citation" data-cites="choi2021">(<a href="#ref-choi2021" role="doc-biblioref"><strong>choi2021?</strong></a>)</span>. Such burstiness may reflect external attention, coordinated interaction, or event-driven editing processes, indicating that instability can also emerge through temporal concentration rather than explicit conflict.</p>
-<p>Furthermore, prior work has identified systematic biases in Wikipedia content, particularly in relation to gender and diversity. Studies show that women are underrepresented and differently characterized in Wikipedia articles <span class="citation" data-cites="reagle2011 graells2015 sun2021">(<a href="#ref-reagle2011" role="doc-biblioref"><strong>reagle2011?</strong></a>; <a href="#ref-graells2015" role="doc-biblioref"><strong>graells2015?</strong></a>; <a href="#ref-sun2021" role="doc-biblioref"><strong>sun2021?</strong></a>)</span>. These findings suggest that diversity-related topics are shaped by distinct social and editorial dynamics, including uneven attention and potentially heightened contestation.</p>
+<p>Wikipedia is one of the most widely used knowledge infrastructures in the world. However, its content is not fixed. It is continuously updated, revised, and contested by editors. This dynamic character makes Wikipedia not only a source of information, but also a data system shaped by ongoing social processes. Early work comparing Wikipedia with traditional encyclopedias has shown that its accuracy can be comparable in many cases, while still varying across articles and topics <span class="citation" data-cites="giles_special_2005">(<a href="#ref-giles_special_2005" role="doc-biblioref">Giles 2005</a>)</span>.</p>
+<p>Prior research has examined the quality and reliability of Wikipedia articles, emphasizing the implications of its open and collaborative nature. Because Wikipedia allows a large number of contributors to continuously edit and revise content, article quality is inherently dynamic and subject to variation over time <span class="citation" data-cites="moas_automatic_2024">(<a href="#ref-moas_automatic_2024" role="doc-biblioref">Moás and Lopes 2024</a>)</span>. In addition to textual characteristics, revision history and editing behavior have been identified as important indicators for evaluating article quality, reflecting the process through which content is produced and maintained <span class="citation" data-cites="raman_classifying_2020 zeng_computing_2006">(<a href="#ref-raman_classifying_2020" role="doc-biblioref">Raman et al. 2020</a>; <a href="#ref-zeng_computing_2006" role="doc-biblioref">Zeng et al. 2006</a>)</span>.</p>
+<p>At the same time, editing activity in Wikipedia is shaped by social interaction and conflict. Previous studies have shown that intense disagreements, often manifested as mutual reverts, characterize a subset of highly contested articles <span class="citation" data-cites="sumi_edit_2011">(<a href="#ref-sumi_edit_2011" role="doc-biblioref">Sumi and Yasseri 2011</a>)</span>. These findings suggest that certain topics may exhibit higher levels of revert-related instability, reflecting ongoing editorial contestation.</p>
+<p>In parallel, research on human dynamics demonstrates that activity is often temporally concentrated rather than evenly distributed. Human activity patterns have been shown to follow bursty dynamics, where short periods of intense activity are followed by longer periods of inactivity <span class="citation" data-cites="barabasi_origin_2005">(<a href="#ref-barabasi_origin_2005" role="doc-biblioref">Barabasi 2005</a>)</span>. Editing behavior in Wikipedia exhibits similar bursty patterns, where periods of intense activity are followed by relative inactivity <span class="citation" data-cites="choi_individual-driven_2021">(<a href="#ref-choi_individual-driven_2021" role="doc-biblioref">Choi, Hiraoka, and Jo 2021</a>)</span>. Such burstiness may reflect external attention, coordinated interaction, or event-driven editing processes, indicating that instability can also emerge through temporal concentration rather than explicit conflict.</p>
+<p>Furthermore, prior work has identified systematic biases in Wikipedia content, particularly in relation to gender and diversity. Studies show that women are underrepresented and differently characterized in Wikipedia articles <span class="citation" data-cites="reagle_gender_2011 graells-garrido_first_2015 sun_men_2021">(<a href="#ref-reagle_gender_2011" role="doc-biblioref">Reagle and Rhue 2011</a>; <a href="#ref-graells-garrido_first_2015" role="doc-biblioref">Graells-Garrido, Lalmas, and Menczer 2015</a>; <a href="#ref-sun_men_2021" role="doc-biblioref">Sun and Peng 2021</a>)</span>. These findings suggest that diversity-related topics are shaped by distinct social and editorial dynamics, including uneven attention and potentially heightened contestation.</p>
 <p>Despite these advances, existing research has primarily focused on content-based quality measures or revision-based indicators such as edit counts and revert rates. Less attention has been given to the temporal stability of articles as a dimension of data quality. In particular, it remains unclear whether certain types of topics—such as diversity-related pages—are systematically more unstable, and whether such instability affects their reliability as data.</p>
 <p>This report addresses this gap by conceptualizing instability as a data quality issue. Rather than focusing only on the volume of edits or the presence of conflict, it examines how editing activity is distributed over time. Specifically, it investigates whether diversity-related Wikipedia pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time.</p>
-<p>This report focuses on English Wikipedia and examines whether diversity-related pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time. English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality. Prior research has also predominantly relied on English Wikipedia when examining revision-based indicators of quality and collaboration dynamics, making it a suitable and comparable context for this study <span class="citation" data-cites="moas2023 raman2020">(<a href="#ref-moas2023" role="doc-biblioref"><strong>moas2023?</strong></a>; <a href="#ref-raman2020" role="doc-biblioref"><strong>raman2020?</strong></a>)</span>.</p>
-<section id="research-questions" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="research-questions"><span class="header-section-number">1.1</span> Research Questions</h3>
+<p>This report focuses on English Wikipedia and examines whether diversity-related pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time. English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality. Prior research has also predominantly relied on English Wikipedia when examining revision-based indicators of quality and collaboration dynamics, making it a suitable and comparable context for this study <span class="citation" data-cites="moas_automatic_2024 raman_classifying_2020">(<a href="#ref-moas_automatic_2024" role="doc-biblioref">Moás and Lopes 2024</a>; <a href="#ref-raman_classifying_2020" role="doc-biblioref">Raman et al. 2020</a>)</span>. ### Research Questions</p>
 <ul>
 <li>Are diversity-related Wikipedia pages more unstable than other pages?</li>
 <li>Does instability appear primarily as revert-related conflict or as bursty temporal concentration?</li>
 <li>Can mitigation strategies improve data reliability?</li>
 </ul>
-</section>
-<section id="hypotheses" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="hypotheses"><span class="header-section-number">1.2</span> Hypotheses</h3>
+<section id="hypotheses" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="hypotheses"><span class="header-section-number">1.1</span> Hypotheses</h3>
 <ul>
 <li><strong>H1</strong>: Diversity-related pages have higher revert-related instability.</li>
 <li><strong>H2</strong>: Diversity-related pages show stronger editing bursts.</li>
@@ -2694,17 +2692,18 @@ This captures whether a specific page-day is unusually intense relative to that 
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: 00_setup</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">echo =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">message =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">warning =</span> <span class="cn">FALSE</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(<span class="at">CRAN =</span> <span class="st">&quot;https://cran.r-project.org&quot;</span>))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">echo =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">message =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">warning =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(<span class="at">CRAN =</span> <span class="st">&quot;https://cran.r-project.org&quot;</span>))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -2806,8 +2805,14 @@ Attaching package: &#39;scales&#39;</code></pre>
 <h2 data-number="3" class="anchored" data-anchor-id="structural-instability-at-the-page-level"><span class="header-section-number">3</span> Structural Instability at the Page Level</h2>
 <p>We first examine structural instability at the page level. Here, instability is defined as the concentration of edits within a small number of days. This captures whether some pages are structurally more burst-prone than others. Table 1 reports descriptive statistics of page-level instability by topic group.</p>
 <div class="cell">
+<div id="tbl-page-results-table" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-page-results-table-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 1: Page-level instability by topic group
+</figcaption>
+<div aria-describedby="tbl-page-results-table-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="table caption-top table-sm table-striped small">
+<table class="table do-not-create-environment cell caption-top table-sm table-striped small">
 <caption>Page-level instability by topic group</caption>
 <thead>
 <tr class="header">
@@ -2846,6 +2851,9 @@ Attaching package: &#39;scales&#39;</code></pre>
 </table>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <p>Diversity-related pages show a higher mean edit burst (0.58) compared to other pages (0.44), indicating stronger concentration of edits. In contrast, the mean share of reverted edits is similar across groups.</p>
 <p>Figure 1 visualizes the distribution of page-level edit burst by topic group.</p>
 <div class="cell">
@@ -2871,8 +2879,14 @@ Figure 1: Structural editing burstiness by topic
 <h2 data-number="4" class="anchored" data-anchor-id="temporal-instability-at-the-day-level"><span class="header-section-number">4</span> Temporal Instability at the Day Level</h2>
 <p>This report next examines instability at the page-day level. Here, the goal is to identify whether certain days are unusually intense relative to a page’s typical editing pattern. Table 2 reports day-level instability measures by topic group.</p>
 <div class="cell">
+<div id="tbl-day-results" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-day-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 2: Day-level instability by topic group
+</figcaption>
+<div aria-describedby="tbl-day-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="table caption-top table-sm table-striped small">
+<table class="table do-not-create-environment cell caption-top table-sm table-striped small">
 <caption>Day-level instability by topic group</caption>
 <thead>
 <tr class="header">
@@ -2914,6 +2928,9 @@ Figure 1: Structural editing burstiness by topic
 </table>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <p>The share of burst days is lower for diversity-related pages (0.019) than for other pages (0.031), suggesting that burst events are not more frequent in diversity-related topics.</p>
 <p>Figure 2 shows the share of burst days by topic group.</p>
 <div class="cell">
@@ -2949,7 +2966,7 @@ Figure 2: Share of burst days by topic
 <div id="tbl-mitigation" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mitigation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 1: Mitigation comparison across designs
+Table 3: Mitigation comparison across designs
 </figcaption>
 <div aria-describedby="tbl-mitigation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -3103,8 +3120,37 @@ Figure 4: Mitigation comparison: revert-related instability
 
 <div id="quarto-appendix" class="default"><section id="references" class="level2 appendix" data-number="6"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">6</span> References</h2><div class="quarto-appendix-contents">
 
-<div id="refs" role="list">
-
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-barabasi_origin_2005" class="csl-entry" role="listitem">
+Barabasi, Albert-Laszlo. 2005. <span>“The Origin of Bursts and Heavy Tails in Human Dynamics.”</span> <em>Nature</em> 435 (7039): 207–11. <a href="https://idp.nature.com/authorize/casa?redirect_uri=https://www.nature.com/articles/nature03459&amp;casa_token=YKjOMredjuEAAAAA:y-ur4yCleY5OivhhSxIvgSwxNVVxjlFP8tdLnJRE7ONRybpNqw6_315pR9E2xdYatfe55X9Ha7CxxJc2bg">https://idp.nature.com/authorize/casa?redirect_uri=https://www.nature.com/articles/nature03459&amp;casa_token=YKjOMredjuEAAAAA:y-ur4yCleY5OivhhSxIvgSwxNVVxjlFP8tdLnJRE7ONRybpNqw6_315pR9E2xdYatfe55X9Ha7CxxJc2bg</a>.
+</div>
+<div id="ref-choi_individual-driven_2021" class="csl-entry" role="listitem">
+Choi, Jeehye, Takayuki Hiraoka, and Hang-Hyun Jo. 2021. <span>“Individual-Driven Versus Interaction-Driven Burstiness in Human Dynamics: <span>The</span> Case of <span>Wikipedia</span> Edit History.”</span> <em>Physical Review E</em> 104 (1): 014312. <a href="https://doi.org/10.1103/PhysRevE.104.014312">https://doi.org/10.1103/PhysRevE.104.014312</a>.
+</div>
+<div id="ref-giles_special_2005" class="csl-entry" role="listitem">
+Giles, Jim. 2005. <span>“Special <span>Report</span> <span>Internet</span> Encyclopaedias Go Head to Head.”</span> <em>Nature</em> 438 (15): 900–901. <a href="https://www.aetherometry.com/Electronic_Publications/Politics_of_Science/Antiwikipedia2/Appendix_1.html">https://www.aetherometry.com/Electronic_Publications/Politics_of_Science/Antiwikipedia2/Appendix_1.html</a>.
+</div>
+<div id="ref-graells-garrido_first_2015" class="csl-entry" role="listitem">
+Graells-Garrido, Eduardo, Mounia Lalmas, and Filippo Menczer. 2015. <span>“First <span>Women</span>, <span>Second</span> <span>Sex</span>: <span>Gender</span> <span>Bias</span> in <span>Wikipedia</span>.”</span> In <em>Proceedings of the 26th <span>ACM</span> <span>Conference</span> on <span>Hypertext</span> &amp; <span>Social</span> <span>Media</span> - <span>HT</span> ’15</em>, 165–74. Guzelyurt, Northern Cyprus: ACM Press. <a href="https://doi.org/10.1145/2700171.2791036">https://doi.org/10.1145/2700171.2791036</a>.
+</div>
+<div id="ref-moas_automatic_2024" class="csl-entry" role="listitem">
+Moás, Pedro Miguel, and Carla Teixeira Lopes. 2024. <span>“Automatic <span>Quality</span> <span>Assessment</span> of <span>Wikipedia</span> <span>Articles</span>—<span>A</span> <span>Systematic</span> <span>Literature</span> <span>Review</span>.”</span> <em>ACM Computing Surveys</em> 56 (4): 1–37. <a href="https://doi.org/10.1145/3625286">https://doi.org/10.1145/3625286</a>.
+</div>
+<div id="ref-raman_classifying_2020" class="csl-entry" role="listitem">
+Raman, Narun, Nathaniel Sauerberg, Jonah Fisher, and Sneha Narayan. 2020. <span>“Classifying <span>Wikipedia</span> <span>Article</span> <span>Quality</span> <span>With</span> <span>Revision</span> <span>History</span> <span>Networks</span>.”</span> In <em>Proceedings of the 16th <span>International</span> <span>Symposium</span> on <span>Open</span> <span>Collaboration</span></em>, 1–7. Virtual conference Spain: ACM. <a href="https://doi.org/10.1145/3412569.3412581">https://doi.org/10.1145/3412569.3412581</a>.
+</div>
+<div id="ref-reagle_gender_2011" class="csl-entry" role="listitem">
+Reagle, Joseph, and Lauren Rhue. 2011. <span>“Gender Bias in <span>Wikipedia</span> and <span>Britannica</span>.”</span> <em>International Journal of Communication</em> 5: 21–21. <a href="https://ijoc.org/index.php/ijoc/article/view/777">https://ijoc.org/index.php/ijoc/article/view/777</a>.
+</div>
+<div id="ref-sumi_edit_2011" class="csl-entry" role="listitem">
+Sumi, Róbert, and Taha Yasseri. 2011. <span>“Edit Wars in <span>Wikipedia</span>.”</span> In <em>2011 <span>IEEE</span> <span>Third</span> International Conference on Privacy, Security, Risk and Trust and 2011 <span>IEEE</span> Third International Conference on Social Computing</em>, 724–27. IEEE. <a href="https://ieeexplore.ieee.org/abstract/document/6113205/">https://ieeexplore.ieee.org/abstract/document/6113205/</a>.
+</div>
+<div id="ref-sun_men_2021" class="csl-entry" role="listitem">
+Sun, Jiao, and Nanyun Peng. 2021. <span>“Men Are Elected, Women Are Married: <span>Events</span> Gender Bias on Wikipedia.”</span> In <em>Proceedings of the 59th <span>Annual</span> <span>Meeting</span> of the <span>Association</span> for <span>Computational</span> <span>Linguistics</span> and the 11th <span>International</span> <span>Joint</span> <span>Conference</span> on <span>Natural</span> <span>Language</span> <span>Processing</span> (<span>Volume</span> 2: <span>Short</span> <span>Papers</span>)</em>, 350–60. <a href="https://aclanthology.org/2021.acl-short.45/">https://aclanthology.org/2021.acl-short.45/</a>.
+</div>
+<div id="ref-zeng_computing_2006" class="csl-entry" role="listitem">
+Zeng, Honglei, Maher Alhossaini, Li Ding, Richard Fikes, and Deborah L. McGuinness. 2006. <span>“Computing Trust from Revision History.”</span> In <em>Proceedings of the 2006 <span>International</span> <span>Conference</span> on <span>Privacy</span>, <span>Security</span> and <span>Trust</span></em>. <a href="https://ebiquity.umbc.edu/paper/html/id/320/Computing-Trust-from-Revision-History%7D">https://ebiquity.umbc.edu/paper/html/id/320/Computing-Trust-from-Revision-History%7D</a>.
+</div>
 </div>
 </div></section><section id="software-session-info" class="level2 appendix" data-number="7"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">7</span> Software &amp; Session Info</h2><div class="quarto-appendix-contents">
 

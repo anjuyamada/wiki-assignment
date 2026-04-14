@@ -34,22 +34,21 @@ format:
 ---
 ## Introduction
 
-Wikipedia is one of the most widely used knowledge infrastructures in the world. However, its content is not fixed. It is continuously updated, revised, and contested by editors. This dynamic character makes Wikipedia not only a source of information, but also a data system shaped by ongoing social processes. Early work comparing Wikipedia with traditional encyclopedias has shown that its accuracy can be comparable in many cases, while still varying across articles and topics [@giles2005].
+Wikipedia is one of the most widely used knowledge infrastructures in the world. However, its content is not fixed. It is continuously updated, revised, and contested by editors. This dynamic character makes Wikipedia not only a source of information, but also a data system shaped by ongoing social processes. Early work comparing Wikipedia with traditional encyclopedias has shown that its accuracy can be comparable in many cases, while still varying across articles and topics [@giles_special_2005].
 
-Prior research has examined the quality and reliability of Wikipedia articles, emphasizing the implications of its open and collaborative nature. Because Wikipedia allows a large number of contributors to continuously edit and revise content, article quality is inherently dynamic and subject to variation over time [@moas2023]. In addition to textual characteristics, revision history and editing behavior have been identified as important indicators for evaluating article quality, reflecting the process through which content is produced and maintained [@raman2020; @zeng2006].
+Prior research has examined the quality and reliability of Wikipedia articles, emphasizing the implications of its open and collaborative nature. Because Wikipedia allows a large number of contributors to continuously edit and revise content, article quality is inherently dynamic and subject to variation over time [@moas_automatic_2024]. In addition to textual characteristics, revision history and editing behavior have been identified as important indicators for evaluating article quality, reflecting the process through which content is produced and maintained [@raman_classifying_2020; @zeng_computing_2006].
 
-At the same time, editing activity in Wikipedia is shaped by social interaction and conflict. Previous studies have shown that intense disagreements, often manifested as mutual reverts, characterize a subset of highly contested articles [@sumi2011]. These findings suggest that certain topics may exhibit higher levels of revert-related instability, reflecting ongoing editorial contestation.
+At the same time, editing activity in Wikipedia is shaped by social interaction and conflict. Previous studies have shown that intense disagreements, often manifested as mutual reverts, characterize a subset of highly contested articles [@sumi_edit_2011]. These findings suggest that certain topics may exhibit higher levels of revert-related instability, reflecting ongoing editorial contestation.
 
-In parallel, research on human dynamics demonstrates that activity is often temporally concentrated rather than evenly distributed. Human activity patterns have been shown to follow bursty dynamics, where short periods of intense activity are followed by longer periods of inactivity [@barabasi2005]. Editing behavior in Wikipedia exhibits similar bursty patterns, where periods of intense activity are followed by relative inactivity [@choi2021]. Such burstiness may reflect external attention, coordinated interaction, or event-driven editing processes, indicating that instability can also emerge through temporal concentration rather than explicit conflict.
+In parallel, research on human dynamics demonstrates that activity is often temporally concentrated rather than evenly distributed. Human activity patterns have been shown to follow bursty dynamics, where short periods of intense activity are followed by longer periods of inactivity [@barabasi_origin_2005]. Editing behavior in Wikipedia exhibits similar bursty patterns, where periods of intense activity are followed by relative inactivity [@choi_individual-driven_2021]. Such burstiness may reflect external attention, coordinated interaction, or event-driven editing processes, indicating that instability can also emerge through temporal concentration rather than explicit conflict.
 
-Furthermore, prior work has identified systematic biases in Wikipedia content, particularly in relation to gender and diversity. Studies show that women are underrepresented and differently characterized in Wikipedia articles [@reagle2011; @graells2015; @sun2021]. These findings suggest that diversity-related topics are shaped by distinct social and editorial dynamics, including uneven attention and potentially heightened contestation.
+Furthermore, prior work has identified systematic biases in Wikipedia content, particularly in relation to gender and diversity. Studies show that women are underrepresented and differently characterized in Wikipedia articles [@reagle_gender_2011; @graells-garrido_first_2015; @sun_men_2021]. These findings suggest that diversity-related topics are shaped by distinct social and editorial dynamics, including uneven attention and potentially heightened contestation.
 
 Despite these advances, existing research has primarily focused on content-based quality measures or revision-based indicators such as edit counts and revert rates. Less attention has been given to the temporal stability of articles as a dimension of data quality. In particular, it remains unclear whether certain types of topics—such as diversity-related pages—are systematically more unstable, and whether such instability affects their reliability as data.
 
 This report addresses this gap by conceptualizing instability as a data quality issue. Rather than focusing only on the volume of edits or the presence of conflict, it examines how editing activity is distributed over time. Specifically, it investigates whether diversity-related Wikipedia pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time.
 
-This report focuses on English Wikipedia and examines whether diversity-related pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time. English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality. Prior research has also predominantly relied on English Wikipedia when examining revision-based indicators of quality and collaboration dynamics, making it a suitable and comparable context for this study [@moas2023; @raman2020].
-
+This report focuses on English Wikipedia and examines whether diversity-related pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time. English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality. Prior research has also predominantly relied on English Wikipedia when examining revision-based indicators of quality and collaboration dynamics, making it a suitable and comparable context for this study [@moas_automatic_2024; @raman_classifying_2020].
 ### Research Questions
 
 - Are diversity-related Wikipedia pages more unstable than other pages?
@@ -81,7 +80,8 @@ This report interprets both as potential data quality issues, especially in rela
 
 #| label: 00_setup
 #| include: false
-
+#| message: false
+#| warning: false
 knitr::opts_chunk$set(
   echo = FALSE,
   message = FALSE,
@@ -105,6 +105,8 @@ library(forcats)
 ```
 
 ```{r}
+#| message: false
+#| warning: false
 # -------------------------
 # Output folders
 # -------------------------
@@ -142,7 +144,8 @@ save_plot_png <- function(plot_obj, filename, width = 8, height = 5, dpi = 300) 
 ```
 
 ```{r, warning=FALSE, message=FALSE}
-
+#| message: false
+#| warning: false
 topic_colors <- c(
   "Diversity-related pages" = "#7B61FF",
   "Other pages" = "#2BB3B1"
@@ -211,7 +214,8 @@ close(con_enwiki)
 
 ```{r, warning=FALSE, message=FALSE}
 #| label: 02_helpers
-
+#| message: false
+#| warning: false
 get_label_prob <- function(label_df, target_label) {
   match <- label_df %>% filter(label == target_label)
   if (nrow(match) == 0) return(0)
@@ -242,7 +246,8 @@ safe_quantile <- function(x, p) {
 
 
 ```{r, warning=FALSE, message=FALSE}
-
+#| message: false
+#| warning: false
 #| label: 03_prepare_data
 
 pv_en <- pageviews_sample %>%
@@ -286,7 +291,8 @@ edits_en <- enwiki_sample %>%
 
 
 ```{r, warning=FALSE, message=FALSE}
-
+#| message: false
+#| warning: false
 #| label: 04_daily_analysis
 
 pv_date_col <- intersect(names(pv_en), c("date", "timestamp", "view_day", "day"))
@@ -360,7 +366,8 @@ We first examine structural instability at the page level. Here, instability is 
 Table 1 reports descriptive statistics of page-level instability by topic group.
 
 ```{r, warning=FALSE, message=FALSE}
-
+#| message: false
+#| warning: false
 #| label: tbl-page-results-table
 #| tbl-cap: "Page-level instability by topic group"
 
@@ -387,6 +394,8 @@ Diversity-related pages show a higher mean edit burst (0.58) compared to other p
 
 Figure 1 visualizes the distribution of page-level edit burst by topic group.
 ```{r, warning=FALSE, message=FALSE}
+#| message: false
+#| warning: false
 #| label: fig-page-results-plot
 #| fig-cap: "Structural editing burstiness by topic"
 
@@ -430,7 +439,8 @@ Diversity-related pages show consistently higher burst values, indicating strong
 
 ```{r, warning=FALSE, message=FALSE}
 #| label: 05_hypothesis_tests_page
-
+#| message: false
+#| warning: false
 test_h1_all <- t.test(mean_reverted_share_day ~ diversity_topic, data = page_instability)
 test_h2_all <- t.test(edit_burst ~ diversity_topic, data = page_instability)
 
@@ -449,7 +459,8 @@ This report next examines instability at the page-day level. Here, the goal is t
 Table 2 reports day-level instability measures by topic group.
 
 ```{r, warning=FALSE, message=FALSE}
-
+#| message: false
+#| warning: false
 #| label: tbl-day-results
 #| tbl-cap: "Day-level instability by topic group"
 
@@ -521,6 +532,8 @@ p_burst_day
 The share of burst days is lower for diversity-related pages, suggesting that burst events are not more frequent despite higher page-level burstiness.
 
 ```{r, warning=FALSE, message=FALSE}
+#| message: false
+#| warning: false
 #| label: 06_hypothesis_tests_day
 
 test_h3_all <- t.test(as.numeric(burst_day) ~ diversity_topic, data = daily_analysis)
@@ -577,7 +590,8 @@ Table 3 compares instability measures across mitigation strategies.
 ```{r, warning=FALSE, message=FALSE}
 #| label: tbl-mitigation
 #| tbl-cap: "Mitigation comparison across designs"
-
+#| message: false
+#| warning: false
 mitigation_compare <- bind_rows(
   page_instability %>%
     group_by(diversity_topic) %>%
@@ -675,7 +689,8 @@ Figure 3 compares burst-related instability across mitigation strategies.
 ```{r, warning=FALSE, message=FALSE}
 #| label: fig-mit-burst
 #| fig-cap: "Mitigation comparison: burst-related instability"
-
+#| message: false
+#| warning: false
 p_mit_burst <- mitigation_compare_pretty %>%
   ggplot(aes(x = design, y = mean_edit_burst, color = topic_label, group = topic_label)) +
   geom_line(linewidth = 1.1) +
@@ -709,7 +724,8 @@ Figure 4 compares revert-related instability across mitigation strategies.
 ```{r, warning=FALSE, message=FALSE}
 #| label: fig-mit-revert
 #| fig-cap: "Mitigation comparison: revert-related instability"
-
+#| message: false
+#| warning: false
 p_mit_revert <- mitigation_compare_pretty %>%
   ggplot(aes(x = design, y = mean_reverted_share_day, color = topic_label, group = topic_label)) +
   geom_line(linewidth = 1.1) +
