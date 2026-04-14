@@ -30,7 +30,7 @@ format:
     fig-dpi: 300
     number-sections: true
     bibliography: references.bib
-    csl: apa.csl
+  
 ---
 ## Introduction
 
