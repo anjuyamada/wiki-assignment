@@ -18,20 +18,20 @@ format:
   html:
     toc: true
     toc-location: left
-    toc-depth: 3
+    toc-depth: 2
     toc-title: "Contents"
     embed-resources: true
     code-fold: true
-    code-tools: true
+    code-tools: false
     code-summary: "Show code"
-    theme: cosmo
+    theme: litera
     fig-width: 10
     fig-height: 7
     fig-dpi: 300
     number-sections: true
 ---
 ## Introduction
-  
+
 Wikipedia is one of the most widely used knowledge infrastructures in the world. However, its content is not fixed. It is continuously updated, revised, and contested by editors. This dynamic character makes Wikipedia not only a source of information, but also a data system shaped by social processes.
 
 This study examines whether diversity-related Wikipedia pages are associated with greater instability, and whether such instability can be understood as a data quality issue. Our main concern is not simply whether some pages attract more attention, but whether external attention and internal contestation make page content less stable and therefore less reliable as data.
@@ -43,9 +43,9 @@ We focus on English Wikipedia and examine whether diversity-related pages differ
 - Are diversity-related Wikipedia pages more unstable than other pages?
 - Does instability appear primarily as revert-related conflict or as bursty temporal concentration?
 - Can mitigation strategies improve data reliability?
-  
+
 ### Hypotheses
-  
+
 - **H1**: Diversity-related pages have higher revert-related instability.
 - **H2**: Diversity-related pages show stronger editing bursts.
 - **H3**: Diversity-related pages are more likely to experience burst days.
@@ -55,16 +55,17 @@ We focus on English Wikipedia and examine whether diversity-related pages differ
 We use Wikimedia data for English Wikipedia, combining page-level metadata, daily pageviews, and edit logs. Diversity-related pages are defined conservatively using the label `Culture.Biography.Women`. We also identify biography pages using `Culture.Biography.Biography*`.
 
 Our analysis distinguishes between two kinds of instability:
-  
+
 1. **Structural instability** at the page level  
-This captures whether editing activity is concentrated into a small number of days for a page overall.
+   This captures whether editing activity is concentrated into a small number of days for a page overall.
 
 2. **Temporal instability** at the day level  
-This captures whether a specific page-day is unusually intense relative to that page’s normal editing pattern.
+   This captures whether a specific page-day is unusually intense relative to that page’s normal editing pattern.
 
 We interpret both as potential data quality issues, especially in relation to consistency and reliability.
 
-## Data Preparation
+
+### Data Preparation
 
 ```{r}
 #| label: 00_setup
@@ -84,6 +85,8 @@ library(ggplot2)
 library(readr)
 library(knitr)
 library(kableExtra)
+library(scales)
+library(forcats)
 ```
 
 ```{r}
@@ -120,6 +123,38 @@ save_plot_png <- function(plot_obj, filename, width = 8, height = 5, dpi = 300) 
     height = height,
     dpi = dpi
   )
+}
+```
+
+```{r, warning=FALSE, message=FALSE}
+
+topic_colors <- c(
+  "Diversity-related pages" = "#7B61FF",
+  "Other pages" = "#2BB3B1"
+)
+
+design_colors <- c(
+  "Raw" = "#4C78A8",
+  "Revert filtered" = "#F58518",
+  "Revert weighted" = "#54A24B",
+  "Burst weighted" = "#E45756",
+  "Event-day trimmed" = "#B279A2",
+  "Combined" = "#72B7B2"
+)
+
+theme_report <- function() {
+  theme_minimal(base_size = 13) +
+    theme(
+      plot.title = element_text(face = "bold", size = 15),
+      plot.subtitle = element_text(size = 11, color = "gray30"),
+      plot.caption = element_text(size = 9, color = "gray40"),
+      axis.title = element_text(face = "bold"),
+      axis.text.x = element_text(color = "gray20"),
+      axis.text.y = element_text(color = "gray20"),
+      panel.grid.minor = element_blank(),
+      legend.position = "top",
+      legend.title = element_blank()
+    )
 }
 ```
 
@@ -336,18 +371,38 @@ result_pages_all |>
 #| fig-cap: "Structural editing burstiness by topic"
 
 p_page_burst <- page_instability %>%
-  mutate(topic_label = if_else(diversity_topic, "Diversity", "Non-diversity")) %>%
-  ggplot(aes(x = topic_label, y = edit_burst)) +
-  geom_boxplot() +
-  labs(
-    title = "Structural editing burstiness by topic",
-    x = "",
-    y = "Edit burst"
+  mutate(
+    topic_label = if_else(
+      diversity_topic,
+      "Diversity-related pages",
+      "Other pages"
+    )
+  ) %>%
+  ggplot(aes(x = topic_label, y = edit_burst, fill = topic_label)) +
+  geom_boxplot(width = 0.65, alpha = 0.85, outlier.alpha = 0.25) +
+  stat_summary(
+    fun = median,
+    geom = "point",
+    shape = 23,
+    size = 3,
+    fill = "white",
+    color = "black"
   ) +
-  theme_minimal()
+  scale_fill_manual(values = topic_colors) +
+  scale_y_continuous(
+    labels = label_percent(accuracy = 1),
+    expand = expansion(mult = c(0.02, 0.08))
+  ) +
+  labs(
+    title = "Structural editing burstiness is higher for diversity-related pages",
+    subtitle = "Page-level edit concentration, measured as the share of all edits occurring on the single most active day",
+    x = NULL,
+    y = "Edit concentration within page (%)",
+    caption = "White diamond marks the median"
+  ) +
+  theme_report()
 
 save_plot_png(p_page_burst, "structural_edit_burst_by_topic.png")
-
 p_page_burst
 
 ```
@@ -361,7 +416,6 @@ test_h2_all <- t.test(edit_burst ~ diversity_topic, data = page_instability)
 test_h1_all
 test_h2_all
 ```
-### Interpretation
 
 At the page level, diversity-related pages do not show higher revert-related instability. Thus, H1 is not supported.
 
@@ -401,24 +455,43 @@ result_days_all |>
 #| label: 06_day_results_plot
 #| fig-cap: "Share of burst days by topic"
 
-p_burst_day <- daily_analysis %>%
+burst_plot_data <- daily_analysis %>%
   group_by(diversity_topic) %>%
   summarise(
     burst_day_rate = mean(burst_day, na.rm = TRUE),
     .groups = "drop"
   ) %>%
-  mutate(topic_label = if_else(diversity_topic, "Diversity", "Non-diversity")) %>%
-  ggplot(aes(x = topic_label, y = burst_day_rate)) +
-  geom_col() +
-  labs(
-    title = "Share of burst days by topic",
-    x = "",
-    y = "Burst-day rate"
+  mutate(
+    topic_label = if_else(
+      diversity_topic,
+      "Diversity-related pages",
+      "Other pages"
+    )
+  )
+
+p_burst_day <- burst_plot_data %>%
+  ggplot(aes(x = topic_label, y = burst_day_rate, fill = topic_label)) +
+  geom_col(width = 0.62, alpha = 0.9) +
+  geom_text(
+    aes(label = label_percent(accuracy = 0.1)(burst_day_rate)),
+    vjust = -0.35,
+    size = 4
   ) +
-  theme_minimal()
+  scale_fill_manual(values = topic_colors) +
+  scale_y_continuous(
+    labels = label_percent(accuracy = 1),
+    limits = c(0, max(burst_plot_data$burst_day_rate) * 1.18)
+  ) +
+  labs(
+    title = "Burst days are not more common among diversity-related pages",
+    subtitle = "Share of active page-days classified as burst events",
+    x = NULL,
+    y = "Burst days among active page-days (%)"
+  ) +
+  theme_report() +
+  theme(legend.position = "none")
 
 save_plot_png(p_burst_day, "burst_day_rate_by_topic.png")
-
 p_burst_day
 ```
 
@@ -430,8 +503,6 @@ test_h3_all <- t.test(as.numeric(burst_day) ~ diversity_topic, data = daily_anal
 test_h3_all
 
 ```
-### Interpretation
-
 At the day level, the results do not support H3. In fact, burst days are not more common among diversity-related pages under the present operationalization.
 
 This does not contradict the page-level finding of higher edit burst. Rather, it suggests that the instability of diversity-related pages is not driven by a higher frequency of burst days, but by stronger concentration of edits into relatively few days.
@@ -541,82 +612,138 @@ mitigation_compare <- bind_rows(
     )
 )
 
+
+mitigation_compare_pretty <- mitigation_compare %>%
+  mutate(
+    topic_label = if_else(
+      diversity_topic,
+      "Diversity-related pages",
+      "Other pages"
+    ),
+    design = recode(
+      design,
+      "raw" = "Raw",
+      "revert_filtered" = "Revert filtered",
+      "revert_weighted" = "Revert weighted",
+      "topic_burst_weighted" = "Burst weighted",
+      "event_day_trimmed" = "Event-day trimmed",
+      "combined" = "Combined"
+    ),
+    design = factor(
+      design,
+      levels = c(
+        "Raw",
+        "Revert filtered",
+        "Revert weighted",
+        "Burst weighted",
+        "Event-day trimmed",
+        "Combined"
+      )
+    )
+  )
 save_table_csv(mitigation_compare, "mitigation_compare.csv")
 
 mitigation_compare |>
   kable(digits = 3, caption = "Mitigation comparison across designs") |>
   kable_styling(full_width = FALSE)
-
-
 ```
 
 ```{r, warning=FALSE, message=FALSE}
 #| label: 07_mitigation_plot_burst
 #| fig-cap: "Mitigation comparison: burst-related instability"
 
-p_mit_burst <- mitigation_compare %>%
-  mutate(topic_label = if_else(diversity_topic, "Diversity", "Non-diversity")) %>%
-  ggplot(aes(x = design, y = mean_edit_burst, group = topic_label)) +
-  geom_line(aes(linetype = topic_label)) +
-  geom_point(aes(shape = topic_label), size = 2.5) +
-  labs(
-    title = "Mitigation comparison: burst-related instability",
-    x = "Mitigation design",
-    y = "Mean burst measure"
+p_mit_burst <- mitigation_compare_pretty %>%
+  ggplot(aes(x = design, y = mean_edit_burst, color = topic_label, group = topic_label)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 3) +
+  geom_text(
+    aes(label = label_percent(accuracy = 0.1)(mean_edit_burst)),
+    vjust = -0.7,
+    size = 3,
+    show.legend = FALSE
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  scale_color_manual(values = topic_colors) +
+  scale_y_continuous(
+    labels = label_percent(accuracy = 1),
+    expand = expansion(mult = c(0.03, 0.15))
+  ) +
+  labs(
+    title = "Burst-related instability decreases under burst-focused mitigation",
+    subtitle = "Comparison of average burst measure across mitigation designs",
+    x = "Mitigation strategy",
+    y = "Mean burst measure (%)"
+  ) +
+  theme_report() +
+  theme(axis.text.x = element_text(angle = 25, hjust = 1))
 
 save_plot_png(p_mit_burst, "mitigation_burst.png")
 
 p_mit_burst
 ```
+
 ```{r, warning=FALSE, message=FALSE}
 #| label: 07_mitigation_plot_revert
 #| fig-cap: "Mitigation comparison: revert-related instability"
 
-p_mit_revert <- mitigation_compare %>%
-  mutate(topic_label = if_else(diversity_topic, "Diversity", "Non-diversity")) %>%
-  ggplot(aes(x = design, y = mean_reverted_share_day, group = topic_label)) +
-  geom_line(aes(linetype = topic_label)) +
-  geom_point(aes(shape = topic_label), size = 2.5) +
-  labs(
-    title = "Mitigation comparison: revert-related instability",
-    x = "Mitigation design",
-    y = "Mean reverted share"
+p_mit_revert <- mitigation_compare_pretty %>%
+  ggplot(aes(x = design, y = mean_reverted_share_day, color = topic_label, group = topic_label)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 3) +
+  geom_text(
+    aes(label = label_percent(accuracy = 0.1)(mean_reverted_share_day)),
+    vjust = -0.7,
+    size = 3,
+    show.legend = FALSE
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  scale_color_manual(values = topic_colors) +
+  scale_y_continuous(
+    labels = label_percent(accuracy = 1),
+    expand = expansion(mult = c(0.03, 0.15))
+  ) +
+  labs(
+    title = "Revert-focused mitigation reduces revert-related instability",
+    subtitle = "Comparison of average reverted-share measure across mitigation designs",
+    x = "Mitigation strategy",
+    y = "Mean reverted-edit share (%)"
+  ) +
+  theme_report() +
+  theme(axis.text.x = element_text(angle = 25, hjust = 1))
 
 save_plot_png(p_mit_revert, "mitigation_revert.png")
-
 p_mit_revert
 ```
-## Results
+## Summary of findings
+Overall, the findings show a differentiated pattern of instability across dimensions.
 
-This section reports the empirical results of the comparison between diversity-related and non-diversity Wikipedia pages across three dimensions of instability: revert activity, structural burstiness, and burst-day frequency.
+### Page-level structural instability
 
-First, we examine revert-related instability (H1). A Welch two-sample t-test shows no statistically significant difference in the mean share of reverted edits between diversity-related and non-diversity pages ($t = 0.36$, $df = 540.6$, $p = .716$). The mean reverted share is 0.179 for non-diversity pages and 0.174 for diversity-related pages, and the 95% confidence interval includes zero. This indicates that there is no evidence of a difference in revert-based instability between the two groups.
+We first examine structural instability at the page level, defined as the concentration of edits within a small number of days.
 
-Second, we analyse structural editing burstiness at the page level (H2). The results show a statistically significant difference between the two groups ($t = -8.41$, $df = 552.99$, $p < .001$). Diversity-related pages exhibit a higher mean level of burstiness (0.580) compared to non-diversity pages (0.440). The confidence interval does not include zero, indicating a robust difference. This indicates that editing activity on diversity-related pages is more temporally concentrated.
+A Welch two-sample t-test shows no statistically significant difference in the mean share of reverted edits between diversity-related and non-diversity pages ($t = 0.36$, $df = 540.6$, $p = .716$). The mean reverted share is 0.179 for non-diversity pages and 0.174 for diversity-related pages.
 
-Third, we examine the share of burst days (H3), defined as the proportion of days classified as burst events. The difference between the two groups is statistically significant ($t = 3.03$, $df = 1814.2$, $p = .002$). However, the direction of the effect runs counter to expectations: non-diversity pages show a higher mean share of burst days (0.031) compared to diversity-related pages (0.019). This indicates that diversity-related pages do not experience burst events more frequently.
+In contrast, diversity-related pages exhibit significantly higher structural burstiness ($t = -8.41$, $df = 552.99$, $p < .001$). The mean burstiness is 0.580 for diversity-related pages and 0.440 for non-diversity pages.
 
-Taken together, the results reveal a differentiated pattern of instability. While diversity-related pages are not more prone to revert activity and do not exhibit a higher frequency of burst days, they show significantly higher structural burstiness. This indicates that instability in these pages is characterised by stronger temporal concentration of editing activity rather than by more frequent conflict or more frequent burst events.
+This indicates that while revert-related instability does not differ across topics, diversity-related pages show stronger temporal concentration of editing activity. **Thus, H1 is not supported, whereas H2 is strongly supported.**
 
-Finally, we compare mitigation strategies across different measurement designs. Revert-based filtering and weighting reduce revert-related instability but have limited impact on structural burstiness. In contrast, topic- and burst-based weighting more directly reduces page-level burstiness. Event-day trimming reduces spike-related instability at the temporal level. A combined mitigation strategy affects both structural and temporal instability, but differences between diversity-related and non-diversity pages remain visible across all designs.
 
-### Interpretation
+### Day-level temporal instability
 
-The mitigation results show that different strategies address different types of instability.
+We next examine instability at the page-day level, focusing on the share of days classified as burst events.
 
-Revert-based filtering and weighting reduce revert-related instability, but they do not substantially reduce structural burstiness.
+The difference between diversity-related and non-diversity pages is statistically significant ($t = 3.03$, $df = 1814.2$, $p = .002$), but the direction runs counter to expectations. Non-diversity pages show a higher mean share of burst days (0.031) compared to diversity-related pages (0.019).
 
-Topic/burst-based weighting reduces page-level burstiness more directly, indicating that it is better suited to address topic-related structural noise.
+This indicates that diversity-related pages do not experience burst events more frequently, despite showing higher structural burstiness at the page level. **Thus, H3 is not supported.**
 
-Event-day trimming reduces day-level spike-related instability, indicating that temporal instability is partially manageable through time-based filtering.
 
-The combined strategy addresses both structural and temporal instability, but the gap between diversity-related and non-diversity pages does not disappear completely. This suggests that some instability is not simply noise to be removed, but a structural feature of how these pages are edited.
+### Mitigation comparison
+
+We compare mitigation strategies across alternative measurement designs.
+
+Revert-based filtering and weighting reduce revert-related instability but have limited impact on structural burstiness. In contrast, burst-based weighting more directly reduces page-level burstiness. Event-day trimming reduces spike-related instability at the temporal level.
+
+A combined mitigation strategy affects both structural and temporal instability. However, differences between diversity-related and non-diversity pages remain visible across all designs.
+
+These results indicate that different mitigation strategies address different dimensions of instability, and that some instability reflects structural properties of editing rather than noise alone.
 
 ## Discussion
 
