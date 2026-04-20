@@ -127,15 +127,7 @@ save_table_csv <- function(x, filename) {
   readr::write_csv(x, file.path(table_dir, filename))
 }
 
-save_plot_png <- function(plot_obj, filename, width = 8, height = 5, dpi = 300) {
-  ggplot2::ggsave(
-    filename = file.path(fig_dir, filename),
-    plot = plot_obj,
-    width = width,
-    height = height,
-    dpi = dpi
-  )
-}
+
 ```
 
 ```{r, warning=FALSE, message=FALSE}
@@ -186,10 +178,6 @@ n_read <- 50000
 pageviews_path <- file.path("Data", "page_views.json.gz")
 pageinfo_path  <- file.path("Data", "page_info.json.gz")
 enwiki_path    <- file.path("Data", "enwiki.json.gz")
-
-print(pageviews_path)
-print(pageinfo_path)
-print(enwiki_path)
 
 stopifnot(file.exists(pageviews_path))
 stopifnot(file.exists(pageinfo_path))
@@ -430,7 +418,7 @@ p_page_burst <- page_instability %>%
   ) +
   theme_report()
 
-save_plot_png(p_page_burst, "structural_edit_burst_by_topic.png")
+
 p_page_burst
 
 ```
@@ -526,7 +514,7 @@ p_burst_day <- burst_plot_data %>%
   theme_report() +
   theme(legend.position = "none")
 
-save_plot_png(p_burst_day, "burst_day_rate_by_topic.png")
+
 p_burst_day
 ```
 The share of burst days is lower for diversity-related pages, suggesting that burst events are not more frequent despite higher page-level burstiness.
@@ -588,7 +576,7 @@ p_revert_topic <- revert_plot_data %>%
   theme_report() +
   theme(legend.position = "none")
 
-save_plot_png(p_revert_topic, "revert_instability_by_topic.png")
+
 p_revert_topic
 ```
 
@@ -775,7 +763,7 @@ p_mit_burst <- mitigation_compare_pretty %>%
   theme_report() +
   theme(axis.text.x = element_text(angle = 25, hjust = 1))
 
-save_plot_png(p_mit_burst, "mitigation_burst.png")
+
 p_mit_burst
 ```
 Burst-based weighting and event-day trimming substantially reduce burst-related instability, while revert-based methods have limited impact.
@@ -810,10 +798,12 @@ p_mit_revert <- mitigation_compare_pretty %>%
   theme_report() +
   theme(axis.text.x = element_text(angle = 25, hjust = 1))
 
-save_plot_png(p_mit_revert, "mitigation_revert.png")
+
 p_mit_revert
 ```
 Revert-focused mitigation strategies reduce the share of reverted edits, whereas burst-focused methods have little effect on this dimension.
+
+
 ## Discussion
 
 This study examined whether diversity-related Wikipedia pages are more unstable than other pages, and whether that instability can be understood as a data quality issue.

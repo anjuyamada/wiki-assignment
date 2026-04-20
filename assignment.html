@@ -2565,6 +2565,7 @@ window.Quarto = {
   <li><a href="#temporal-instability-at-the-day-level" id="toc-temporal-instability-at-the-day-level" class="nav-link" data-scroll-target="#temporal-instability-at-the-day-level"><span class="header-section-number">4</span> Temporal Instability at the Day Level</a></li>
   <li><a href="#revert-related-instability" id="toc-revert-related-instability" class="nav-link" data-scroll-target="#revert-related-instability"><span class="header-section-number">5</span> Revert-related Instability</a></li>
   <li><a href="#mitigation-strategies" id="toc-mitigation-strategies" class="nav-link" data-scroll-target="#mitigation-strategies"><span class="header-section-number">6</span> Mitigation Strategies</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">7</span> Discussion</a></li>
   
   
   </ul>
@@ -2654,17 +2655,6 @@ This captures whether a specific page-day is unusually intense relative to that 
 This captures the extent to which edits are undone, reflecting disagreement and conflict in editorial activity.</p></li>
 </ol>
 <p>This report interprets all three as potential data quality issues, especially in relation to consistency and reliability.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] &quot;Data/page_views.json.gz&quot;</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] &quot;Data/page_info.json.gz&quot;</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] &quot;Data/enwiki.json.gz&quot;</code></pre>
-</div>
-</div>
 </section>
 <section id="structural-instability-at-the-page-level" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="structural-instability-at-the-page-level"><span class="header-section-number">3</span> Structural Instability at the Page Level</h2>
@@ -2989,14 +2979,17 @@ Figure 5: Mitigation comparison: revert-related instability
 </div>
 </div>
 </div>
-<p>Revert-focused mitigation strategies reduce the share of reverted edits, whereas burst-focused methods have little effect on this dimension. ## Discussion</p>
+<p>Revert-focused mitigation strategies reduce the share of reverted edits, whereas burst-focused methods have little effect on this dimension.</p>
+</section>
+<section id="discussion" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="discussion"><span class="header-section-number">7</span> Discussion</h2>
 <p>This study examined whether diversity-related Wikipedia pages are more unstable than other pages, and whether that instability can be understood as a data quality issue.</p>
 <p>The results provide <strong>dimension-specific evidence</strong>.</p>
 <p>First, diversity-related pages are significantly more bursty at the page level. <strong>H1 is strongly supported.</strong> This indicates that editing activity is more temporally concentrated for these pages, suggesting a form of structural, topic-related instability.</p>
 <p>Second, the day-level analysis does not support <strong>H2</strong>. Diversity-related pages are not more likely to experience burst days under the present definition. This indicates that their higher instability does not arise from more frequent burst events, but rather from a stronger concentration of edits within a smaller number of days.</p>
 <p>Third, we do not find evidence that diversity-related pages are more revert-prone. <strong>H3 is therefore not supported.</strong> This suggests that instability in these pages is not primarily driven by overt revert conflict.</p>
-<section id="dimensions-of-instability" class="level3" data-number="6.1">
-<h3 data-number="6.1" class="anchored" data-anchor-id="dimensions-of-instability"><span class="header-section-number">6.1</span> Dimensions of Instability</h3>
+<section id="dimensions-of-instability" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="dimensions-of-instability"><span class="header-section-number">7.1</span> Dimensions of Instability</h3>
 <p>Taken together, these findings suggest that instability in Wikipedia has at least two distinct dimensions:</p>
 <ul>
 <li><p><strong>Structural instability</strong><br>
@@ -3007,12 +3000,12 @@ reflected in burst days and short-term editing spikes</p></li>
 <p>In addition, revert-related instability captures a distinct dimension of <strong>editorial conflict</strong>, reflected in the share of edits that are undone.</p>
 <p>These dimensions are related but empirically distinct. Diversity-related pages appear especially prone to structural instability, but not to higher levels of conflict or burst events.</p>
 </section>
-<section id="implications-for-data-quality" class="level3" data-number="6.2">
-<h3 data-number="6.2" class="anchored" data-anchor-id="implications-for-data-quality"><span class="header-section-number">6.2</span> Implications for Data Quality</h3>
+<section id="implications-for-data-quality" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="implications-for-data-quality"><span class="header-section-number">7.2</span> Implications for Data Quality</h3>
 <p>From a data quality perspective, this is important because instability is not adequately captured by revert rate alone. A page may not be highly revert-prone but still be unstable if its content is disproportionately shaped by a few concentrated editing periods.</p>
 </section>
-<section id="mitigation-implications" class="level3" data-number="6.3">
-<h3 data-number="6.3" class="anchored" data-anchor-id="mitigation-implications"><span class="header-section-number">6.3</span> Mitigation Implications</h3>
+<section id="mitigation-implications" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="mitigation-implications"><span class="header-section-number">7.3</span> Mitigation Implications</h3>
 <p>The mitigation analysis reinforces this interpretation.</p>
 <ul>
 <li>Revert-based mitigation reduces conflict-related noise, but has limited effect on burst-related instability<br>
@@ -3025,7 +3018,7 @@ reflected in burst days and short-term editing spikes</p></li>
 
 
 
-<div id="quarto-appendix" class="default"><section id="references" class="level2 appendix" data-number="7"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">7</span> References</h2><div class="quarto-appendix-contents">
+<div id="quarto-appendix" class="default"><section id="references" class="level2 appendix" data-number="8"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">8</span> References</h2><div class="quarto-appendix-contents">
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-barabasi_origin_2005" class="csl-entry" role="listitem">
@@ -3059,7 +3052,7 @@ Sun, Jiao, and Nanyun Peng. 2021. <span>“Men Are Elected, Women Are Married: <
 Zeng, Honglei, Maher Alhossaini, Li Ding, Richard Fikes, and Deborah L. McGuinness. 2006. <span>“Computing Trust from Revision History.”</span> In <em>Proceedings of the 2006 <span>International</span> <span>Conference</span> on <span>Privacy</span>, <span>Security</span> and <span>Trust</span></em>. <a href="https://ebiquity.umbc.edu/paper/html/id/320/Computing-Trust-from-Revision-History%7D">https://ebiquity.umbc.edu/paper/html/id/320/Computing-Trust-from-Revision-History%7D</a>.
 </div>
 </div>
-</div></section><section id="software-session-info" class="level2 appendix" data-number="8"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">8</span> Software &amp; Session Info</h2><div class="quarto-appendix-contents">
+</div></section><section id="software-session-info" class="level2 appendix" data-number="9"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">9</span> Software &amp; Session Info</h2><div class="quarto-appendix-contents">
 
 <div class="cell">
 <div class="cell-output cell-output-stdout">
