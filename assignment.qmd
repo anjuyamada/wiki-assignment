@@ -51,14 +51,16 @@ For example, bursty editing dynamics can be interpreted as a form of temporal in
 These patterns suggest that instability in Wikipedia is not a single phenomenon, but may arise from multiple mechanisms, each of which can be understood as introducing different forms of uncertainty into the data.
 
 Applied to digital behavioral data such as Wikipedia, instability in editing activity may reflect a form of measurement-related distortion. Temporal concentration of edits, for example, can influence how content is represented at specific points in time, even without explicit disagreement among editors. This perspective suggests that instability is not merely a descriptive feature of collaborative systems, but a relevant dimension of data quality that should be explicitly analyzed.
-This report addresses this gap by conceptualizing instability as a data quality issue. Rather than focusing only on the volume of edits or the presence of conflict, it examines how editing activity is distributed over time. Specifically, it investigates whether diversity-related Wikipedia pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time.
 
-This report focuses on English Wikipedia and examines whether diversity-related pages differ from other pages in terms of revert-related instability, bursty editing dynamics, and the concentration of edits across time. English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality. Prior research has also predominantly relied on English Wikipedia when examining revision-based indicators of quality and collaboration dynamics, making it a suitable and comparable context for this study [@moas_automatic_2024; @raman_classifying_2020].
+This report addresses this gap by conceptualizing instability as a data quality issue. Rather than focusing only on the volume of edits or the presence of conflict, it examines how editing activity is distributed over time. Specifically, it investigates whether diversity-related Wikipedia pages differ from other pages in terms of structural instability, temporal instability, and revert-related instability.
+
+English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality [@moas_automatic_2024; @raman_classifying_2020].
+
 
 **Research Questions**
 
 - **RQ1**: Are diversity-related Wikipedia pages more unstable than other pages?
-- **RQ2**: Does instability appear primarily as revert-related conflict or as bursty temporal concentration?
+- **RQ2**: Does instability arise primarily from temporal concentration or revert-related conflict?
 - **RQ3**: Can instability be mitigated, and how?
 
 **Hypotheses**
@@ -67,7 +69,7 @@ This report focuses on English Wikipedia and examines whether diversity-related 
   Diversity-related pages exhibit higher structural burstiness (edit concentration).
 - **H2 (temporal instability; RQ1 & RQ2):**  
   Diversity-related pages are expected to show higher burst-day rates.
-- **H3 (conflict-related instability; RQ1 & RQ2):**  
+- **H3 (revert-related instability; RQ1 & RQ2):**  
   Diversity-related pages exhibit higher revert-related instability.
 
 ## Data and Research Design
@@ -149,8 +151,6 @@ topic_colors <- c(
 
 design_colors <- c(
   "Raw" = "#4C78A8",
-  "Revert filtered" = "#F58518",
-  "Revert weighted" = "#54A24B",
   "Burst weighted" = "#E45756",
   "Event-day trimmed" = "#B279A2",
   "Combined" = "#72B7B2"
@@ -482,7 +482,7 @@ result_days_all |>
   kable(digits = 3, caption = "Page-level burst-day rates by topic group") |>
   kable_styling(full_width = FALSE)
 ```
-The share of burst days is lower for diversity-related pages (0.019) than for other pages (0.031), suggesting that burst events are not more frequent in diversity-related topics.
+The share of burst days is lower for diversity-related pages (0.8%) than for other pages (1.7%), suggesting that burst events are not more frequent in diversity-related topics.
 
 Figure 2 compares the mean page-level burst-day rate by topic group. 
 
@@ -528,7 +528,7 @@ p_burst_day <- page_instability %>%
 
 p_burst_day
 ```
-Contrary to expectations, diversity-related pages exhibit a lower burst-day rate (0.019) than other pages (0.031). 
+Contrary to expectations, diversity-related pages exhibit a lower burst-day rate (0.8%) than other pages (1.7%).
 
 This indicates that diversity-related pages are not characterized by more frequent burst events. Instead, burst days are relatively less common within these pages. 
 
@@ -611,26 +611,20 @@ This indicates that diversity-related pages are not more revert-prone than other
 
 ## Mitigation Strategies
 
-This study evaluates several mitigation strategies to assess whether data reliability can be improved once instability has been detected.
+This study focuses on mitigating **structural instability**, as this is the primary dimension along which diversity-related pages differ from other pages. 
+Because no systematic differences are observed in revert-related instability, mitigation efforts are directed toward reducing the concentration of edits over time.
 
-- revert filtering
-- revert weighting
+The following burst-focused strategies are evaluated:
+
 - burst weighting
 - event-day trimming
-- combined mitigation
+- combined mitigation (event-day trimming + burst weighting)
 
 ```{r}
 #| label: 08_mitigation_prep
 #| warning: false
 #| message: false
 
-revert_threshold <- quantile(page_instability$reverted_edit_share, 0.95, na.rm = TRUE)
-
-page_revert_filtered <- page_instability %>%
-  filter(reverted_edit_share <= revert_threshold)
-
-page_revert_weighted <- page_instability %>%
-  mutate(weight_revert = 1 / (1 + reverted_edit_share))
 
 page_burst_weighted <- page_instability %>%
   mutate(weight_burst = 1 / (1 + edit_burst))
@@ -656,7 +650,7 @@ page_combined <- daily_trimmed_page %>%
 Table 3 compares instability measures across mitigation strategies.
 ```{r, warning=FALSE, message=FALSE}
 #| label: tbl-mitigation
-#| tbl-cap: "Mitigation comparison across designs"
+#| tbl-cap: "Structural instability across mitigation designs"
 #| message: false
 #| warning: false
 
@@ -665,34 +659,14 @@ mitigation_compare <- bind_rows(
     group_by(diversity_topic) %>%
     summarise(
       design = "raw",
-      mean_reverted_edit_share = mean(reverted_edit_share, na.rm = TRUE),
       mean_edit_burst = mean(edit_burst, na.rm = TRUE),
       mean_n_edits = mean(n_edits, na.rm = TRUE),
-      .groups = "drop"
-    ),
-  page_revert_filtered %>%
-    group_by(diversity_topic) %>%
-    summarise(
-      design = "revert_filtered",
-      mean_reverted_edit_share = mean(reverted_edit_share, na.rm = TRUE),
-      mean_edit_burst = mean(edit_burst, na.rm = TRUE),
-      mean_n_edits = mean(n_edits, na.rm = TRUE),
-      .groups = "drop"
-    ),
-  page_revert_weighted %>%
-    group_by(diversity_topic) %>%
-    summarise(
-      design = "revert_weighted",
-      mean_reverted_edit_share = weighted.mean(reverted_edit_share, weight_revert, na.rm = TRUE),
-      mean_edit_burst = weighted.mean(edit_burst, weight_revert, na.rm = TRUE),
-      mean_n_edits = weighted.mean(n_edits, weight_revert, na.rm = TRUE),
       .groups = "drop"
     ),
   page_burst_weighted %>%
     group_by(diversity_topic) %>%
     summarise(
       design = "topic_burst_weighted",
-      mean_reverted_edit_share = weighted.mean(reverted_edit_share, weight_burst, na.rm = TRUE),
       mean_edit_burst = weighted.mean(edit_burst, weight_burst, na.rm = TRUE),
       mean_n_edits = weighted.mean(n_edits, weight_burst, na.rm = TRUE),
       .groups = "drop"
@@ -701,7 +675,6 @@ mitigation_compare <- bind_rows(
     group_by(diversity_topic) %>%
     summarise(
       design = "event_day_trimmed",
-      mean_reverted_edit_share = mean(reverted_edit_share, na.rm = TRUE),
       mean_edit_burst = mean(edit_burst, na.rm = TRUE),
       mean_n_edits = mean(n_edits, na.rm = TRUE),
       .groups = "drop"
@@ -710,7 +683,6 @@ mitigation_compare <- bind_rows(
     group_by(diversity_topic) %>%
     summarise(
       design = "combined",
-      mean_reverted_edit_share = weighted.mean(reverted_edit_share, weight_combined, na.rm = TRUE),
       mean_edit_burst = weighted.mean(edit_burst, weight_combined, na.rm = TRUE),
       mean_n_edits = weighted.mean(n_edits, weight_combined, na.rm = TRUE),
       .groups = "drop"
@@ -724,21 +696,17 @@ mitigation_compare_pretty <- mitigation_compare %>%
       "Diversity-related pages",
       "Other pages"
     ),
-    design = recode(
-      design,
+   design = recode(
+     design,
       "raw" = "Raw",
-      "revert_filtered" = "Revert filtered",
-      "revert_weighted" = "Revert weighted",
       "topic_burst_weighted" = "Burst weighted",
       "event_day_trimmed" = "Event-day trimmed",
       "combined" = "Combined"
-    ),
+   ),
     design = factor(
       design,
       levels = c(
         "Raw",
-        "Revert filtered",
-        "Revert weighted",
         "Burst weighted",
         "Event-day trimmed",
         "Combined"
@@ -749,15 +717,15 @@ mitigation_compare_pretty <- mitigation_compare %>%
 save_table_csv(mitigation_compare, "mitigation_compare.csv")
 
 mitigation_compare |>
-  kable(digits = 3, caption = "Mitigation comparison across designs") |>
+  kable(digits = 3, caption = "Structural instability across mitigation designs") |>
   kable_styling(full_width = FALSE)
 ```
-Revert-based methods reduce the page-level reverted edit share but have limited effect on structural edit concentration. In contrast, burst-based weighting and event-day trimming reduce page-level edit burst more directly. Because all mitigation designs are now summarized at the page level, these comparisons are directly comparable across strategies.
+Burst-focused weighting and event-day trimming are evaluated because they directly target the concentration of edits over time. Compared with the raw design, these approaches reduce page-level structural instability more directly. Because all mitigation designs are summarized at the page level, these comparisons are directly comparable across strategies.
 
-Figure 4 compares burst-related instability across mitigation strategies.
+Figure 4 compares structural instability across mitigation strategies.
 ```{r, warning=FALSE, message=FALSE}
 #| label: fig-mit-burst
-#| fig-cap: "Mitigation comparison: burst-related instability"
+#| fig-cap: "Mitigation comparison: structural instability"
 #| message: false
 #| warning: false
 
@@ -777,10 +745,10 @@ p_mit_burst <- mitigation_compare_pretty %>%
     expand = expansion(mult = c(0.03, 0.15))
   ) +
   labs(
-    title = "Burst-related instability decreases under burst-focused mitigation",
-    subtitle = "Comparison of mean page-level edit burst across mitigation designs",
+    title = "Structural instability decreases under burst-focused mitigation",
+    subtitle = "Comparison of mean page-level structural instability across mitigation designs",
     x = "Mitigation strategy",
-    y = "Mean page-level edit burst (%)"
+    y = "Mean page-level edit concentration (%)"
   ) +
   theme_report() +
   theme(axis.text.x = element_text(angle = 25, hjust = 1))
@@ -788,51 +756,12 @@ p_mit_burst <- mitigation_compare_pretty %>%
 
 p_mit_burst
 ```
-Importantly, the reduction is observed across both topic groups, indicating that burst-related instability is not confined to a specific subset of pages but reflects a broader feature of editing dynamics.
+Importantly, the reduction is observed across both topic groups, indicating that structural instability is not confined to a specific subset of pages but reflects a broader feature of editing dynamics.
 
-At the same time, the relative difference between diversity-related and other pages remains visible across most mitigation designs. This suggests that while burst-focused strategies reduce the overall level of instability, they do not fully remove the observed gap between topic groups.
+At the same time, the relative difference between diversity-related and other pages remains visible under burst weighting, event-day trimming, and the combined design.
 
 In other words, the higher level of structural burstiness in diversity-related pages does not appear to be driven solely by a small number of extreme observations. Instead, it reflects a more general pattern in how editing activity is distributed over time within these pages.
-Figure 5 compares revert-related instability across mitigation strategies.
-```{r, warning=FALSE, message=FALSE}
-#| label: fig-mit-revert
-#| fig-cap: "Mitigation comparison: revert-related instability"
-#| message: false
-#| warning: false
 
-p_mit_revert <- mitigation_compare_pretty %>%
-  ggplot(aes(x = design, y = mean_reverted_edit_share, color = topic_label, group = topic_label)) +
-  geom_line(linewidth = 1.1) +
-  geom_point(size = 3) +
-  geom_text(
-    aes(label = label_percent(accuracy = 0.1)(mean_reverted_edit_share)),
-    vjust = -0.7,
-    size = 3,
-    show.legend = FALSE
-  ) +
-  scale_color_manual(values = topic_colors) +
-  scale_y_continuous(
-    labels = label_percent(accuracy = 1),
-    expand = expansion(mult = c(0.03, 0.15))
-  ) +
-  labs(
-    title = "Revert-focused mitigation reduces reverted edit share",
-    subtitle = "Comparison of page-level reverted edit share across mitigation designs",
-    x = "Mitigation strategy",
-    y = "Mean reverted edit share (%)"
-  ) +
-  theme_report() +
-  theme(axis.text.x = element_text(angle = 25, hjust = 1))
-
-p_mit_revert
-```
-This pattern is consistent with the interpretation that revert-related instability captures a distinct dimension that is largely separate from temporal concentration.
-
-In addition, the similarity between topic groups remains stable across all mitigation designs. Even after applying revert-focused adjustments, diversity-related pages do not exhibit systematically higher levels of reverted edits.
-
-Taken together, these results reinforce the earlier finding that editorial conflict does not appear to be the dominant factor underlying instability in diversity-related pages. Instead, the observed patterns are more consistent with differences in the temporal concentration of editing activity rather than disagreement among editors.
-
-Taken together, Figures 4 and 5 highlight that different mitigation strategies selectively target different dimensions of instability, underscoring the importance of distinguishing between structural and conflict-based forms of data quality issues.
 
 
 ## Discussion and Conclusion
@@ -849,22 +778,23 @@ Third, we do not find evidence that diversity-related pages have a higher revert
 
 ### Dimensions of Instability
 
-Taken together, these findings suggest that instability in Wikipedia has at least two distinct dimensions:
+Taken together, these findings suggest that instability in Wikipedia has three distinct dimensions:
 
 - **Structural instability**  
   reflected in the concentration of edits across time  
 
-- **Event-based instability**  
+- **Temporal instability**  
   reflected in the frequency of burst days within a page  
 
-In addition, revert-related instability captures a distinct dimension of **editorial conflict**, reflected in the share of edits that are undone.
+- **Revert-related instability**  
+  capturing editorial conflict, reflected in the share of reverted edits  
 
-These dimensions are related but empirically distinct. Diversity-related pages appear especially prone to structural instability, but not to higher levels of conflict or burst events.
+These dimensions are related but empirically distinct. Diversity-related pages appear especially prone to structural instability, but not to higher levels of temporal or revert-related instability.
 
 
 ### Mitigation Implications
 
-The mitigation analysis reinforces this interpretation. Revert-based strategies mainly reduce the reverted-edit dimension of instability, whereas burst-based strategies mainly reduce the concentration-of-edits dimension. This confirms that instability is multi-dimensional and that mitigation works best when it is matched to the dimension being targeted.
+The mitigation analysis focuses on structural instability, which is the primary source of instability observed in diversity-related pages. Burst-focused strategies effectively reduce edit concentration. Revert-related instability is not targeted because it does not differ systematically between topic groups.
 
 ### Summary of Findings
 
@@ -874,18 +804,21 @@ The hypotheses (H1–H3) jointly address RQ1 and RQ2 by capturing different dime
   → Yes, but specifically in terms of structural instability. Diversity-related pages exhibit higher edit concentration, indicating stronger temporal clustering of editing activity. This is consistent with **H1 (supported)**, while **H2 and H3 are not supported**.
 
 - **RQ2: Does instability arise primarily from temporal concentration or editorial conflict?**  
-  → Instability is primarily driven by temporal concentration rather than editorial conflict. The lack of differences in revert-related instability (**H3 not supported**) indicates that disagreement is not the main driver, while the strong evidence for structural burstiness (**H1 supported**) points to temporal concentration as the dominant mechanism.
+  → Instability is primarily **driven by temporal concentration** rather than editorial conflict. The lack of differences in revert-related instability (**H3 not supported**) indicates that disagreement is not the main driver, while the strong evidence for structural burstiness (**H1 supported**) points to temporal concentration as the dominant mechanism.
 
 - **RQ3: Can instability be mitigated, and how?**  
-  → Instability can be mitigated, but only partially and in a dimension-specific manner. Burst-focused strategies effectively reduce structural instability, whereas revert-based strategies reduce conflict-related instability. However, the difference between diversity-related and other pages persists across mitigation designs.
+  → Yes, primarily through burst-focused strategies that reduce structural instability. In particular, event-day trimming and the combined design reduce edit concentration more directly than alternative approaches.
 
 Overall, these findings show that instability in diversity-related pages is best understood as a form of temporal concentration rather than conflict-driven volatility, and that mitigation strategies can reduce but not fully eliminate this pattern.
 
 ### Implications for Data Quality
 
-From a data quality perspective, these findings can be interpreted through the lens of the Total Error Framework. Rather than treating instability as a platform-specific phenomenon, it can be understood as a form of measurement-related error that affects how underlying content is observed and recorded over time. In particular, bursty editing dynamics introduce temporal concentration that can distort the representation of a page at any given moment, even in the absence of explicit conflict. This is analogous to measurement error, where the observed data deviate from the underlying construct due to the process through which they are generated. 
+From the perspective of the Total Error Framework, these forms of instability can be understood as sources of uncertainty in how Wikipedia content is measured and observed over time. Structural instability is especially relevant because concentrated editing episodes may distort the observed state of a page at a given moment, even without overt conflict. In this sense, instability is not simply platform noise, but a data quality issue that affects the reliability of inference.
 
-Importantly, the results suggest that different forms of instability correspond to different components of the error framework. Revert-related instability aligns with observable disagreement and correction processes, whereas burst-related instability reflects temporal irregularities in data generation. As emphasized in the Total Error Framework, errors are not necessarily mistakes but sources of uncertainty in inference :contentReference[oaicite:0]{index=0}. From this perspective, Wikipedia editing dynamics introduce structured uncertainty into the data, which has implications for how reliably such data can be used for analysis.
+Importantly, the results suggest that different forms of instability correspond to different components of the error framework.
+Revert-related instability aligns with observable disagreement and correction processes, whereas structural instability reflects temporal irregularities in data generation through the concentration of edits across time.
+
+As emphasized in the Total Error Framework, errors are not necessarily mistakes but sources of uncertainty. From this perspective, Wikipedia editing dynamics introduce structured uncertainty into the data, which has implications for how reliably such data can be used for analysis.
 
 ## References {.appendix}
 
