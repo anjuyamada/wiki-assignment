@@ -1,4 +1,4 @@
-diversity_topic,design,mean_edit_burst,mean_n_edits
+women_related_page,design,mean_edit_burst,mean_n_edits
 FALSE,raw,0.43989272953858327,5.859649122807017
 TRUE,raw,0.5800437222490941,3.4149659863945576
 FALSE,topic_burst_weighted,0.38437394437227823,6.641219019891613

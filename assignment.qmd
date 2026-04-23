@@ -1,6 +1,6 @@
 ---
 title: "Instability as a Data Quality Issue in Wikipedia"
-subtitle: "*Evidence from Diversity-Related Topics in English Wikipedia*"
+subtitle: "*Example of Women-Related Topics*"
 license: "CC BY"
 date: 2026-04-01
 date-format: "DD.MM.YYYY"
@@ -9,7 +9,7 @@ keywords:
   - Wikipedia
   - data quality
   - instability
-  - diversity
+  - gender
   - edit conflict
   - burstiness
 author:
@@ -42,39 +42,42 @@ At the same time, editing activity in Wikipedia is shaped by social interaction 
 
 In parallel, research on human dynamics demonstrates that activity is often temporally concentrated rather than evenly distributed. Human activity patterns have been shown to follow bursty dynamics, where short periods of intense activity are followed by longer periods of inactivity [@barabasi_origin_2005]. Editing behavior in Wikipedia exhibits similar bursty patterns, where periods of intense activity are followed by relative inactivity [@choi_individual-driven_2021]. Such burstiness may reflect external attention, coordinated interaction, or event-driven editing processes, indicating that instability can also emerge through temporal concentration rather than explicit conflict.
 
-Furthermore, prior work has identified systematic biases in Wikipedia content, particularly in relation to gender and diversity. Studies show that women are underrepresented and differently characterized in Wikipedia articles [@reagle_gender_2011; @graells-garrido_first_2015; @sun_men_2021]. These findings suggest that diversity-related topics are shaped by distinct social and editorial dynamics, including uneven attention and potentially heightened contestation.
+Furthermore, prior work has identified systematic biases in Wikipedia content, particularly in relation to gender and diversity. Studies show that women are underrepresented and differently characterized in Wikipedia articles [@reagle_gender_2011; @graells-garrido_first_2015; @sun_men_2021]. These findings suggest that women-related topics might be shaped by distinct social and editorial dynamics, including uneven attention and potentially heightened contestation.
 
-Despite these advances, existing research has primarily focused on content-based quality measures or revision-based indicators such as edit counts and revert rates. Less attention has been given to the temporal stability of articles as a dimension of data quality. In particular, it remains unclear whether certain types of topics—such as diversity-related pages—are systematically more unstable, and whether such instability affects their reliability as data.
+Despite these advances, existing research has primarily focused on content-based quality measures or revision-based indicators such as edit counts and revert rates. Less attention has been given to the temporal stability of articles as a dimension of data quality. In particular, it remains unclear whether certain types of pages—such as women-related biography pages—are systematically more unstable, and whether such instability affects their reliability as data.
 
-From a data quality perspective, different forms of instability may correspond to different types of error in the data generation process.
-For example, bursty editing dynamics can be interpreted as a form of temporal instability, where editing activity is unevenly distributed over time. Revert-related activity, in turn, may reflect observable disagreement and correction processes among editors. 
-These patterns suggest that instability in Wikipedia is not a single phenomenon, but may arise from multiple mechanisms, each of which can be understood as introducing different forms of uncertainty into the data.
+From a data quality perspective, different forms of instability may correspond to different types of measurement-related uncertainty in the data generation process. For example, bursty editing dynamics can be interpreted as structural instability, where editing activity is highly concentrated in a small number of days. Temporal instability captures how often such intense editing days occur within a page. Revert-related activity, in turn, reflects observable disagreement and correction processes among editors.
 
-Applied to digital behavioral data such as Wikipedia, instability in editing activity may reflect a form of measurement-related distortion. Temporal concentration of edits, for example, can influence how content is represented at specific points in time, even without explicit disagreement among editors. This perspective suggests that instability is not merely a descriptive feature of collaborative systems, but a relevant dimension of data quality that should be explicitly analyzed.
+These patterns suggest that instability in Wikipedia is not a single phenomenon, but a multidimensional one, arising from different mechanisms that introduce different types of uncertainty into the data.
 
-This report addresses this gap by conceptualizing instability as a data quality issue. Rather than focusing only on the volume of edits or the presence of conflict, it examines how editing activity is distributed over time. Specifically, it investigates whether diversity-related Wikipedia pages differ from other pages in terms of structural instability, temporal instability, and revert-related instability.
+Applied to digital behavioral data such as Wikipedia, instability in editing activity can be understood as a form of measurement-related distortion. Temporal concentration of edits, for example, may influence how content is represented at specific points in time, even without explicit disagreement among editors. This perspective suggests that instability is not merely a descriptive feature of collaborative systems, but a relevant dimension of data quality that should be explicitly analyzed.
+
+This study addresses this gap by conceptualizing instability as a data quality issue. Rather than focusing only on the volume of edits or the presence of conflict, it examines how editing activity is distributed over time. Specifically, it investigates whether women-related biography pages differ from other pages in terms of structural instability, temporal instability, and revert-related instability.
 
 English Wikipedia is used as the empirical setting because it is the largest and most extensively studied language edition, providing a rich and well-documented dataset for analyzing editing behavior and data quality [@moas_automatic_2024; @raman_classifying_2020].
 
+This study adopts an asymmetric comparison between women-related pages and all other pages. Gender-related topics are expected to attract uneven, event-driven attention, resulting in bursty patterns of editing activity rather than steady updates.
+
+The focus on women-related content is motivated by prior research documenting systematic differences in representation and editorial dynamics for women in Wikipedia. Rather than comparing all gender categories symmetrically, the aim is to test whether women-related pages deviate from the broader baseline of Wikipedia content in terms of instability.
 
 **Research Questions**
 
-- **RQ1**: Are diversity-related Wikipedia pages more unstable than other pages?
+- **RQ1**: Are women-related Wikipedia pages more unstable than other pages?
 - **RQ2**: Does instability arise primarily from temporal concentration or revert-related conflict?
 - **RQ3**: Can instability be mitigated, and how?
 
 **Hypotheses**
 
 - **H1 (structural instability; RQ1 & RQ2):**  
-  Diversity-related pages exhibit higher structural burstiness (edit concentration).
+  Women-related biography pages exhibit higher structural burstiness (edit concentration).
 - **H2 (temporal instability; RQ1 & RQ2):**  
-  Diversity-related pages are expected to show higher burst-day rates.
+  Women-related biography pages are expected to show higher burst-day rates.
 - **H3 (revert-related instability; RQ1 & RQ2):**  
-  Diversity-related pages exhibit higher revert-related instability.
+  Women-related biography pages exhibit higher revert-related instability.
 
 ## Data and Research Design
 
-This report uses Wikimedia data for English Wikipedia, combining page-level metadata, daily pageviews, and edit logs. Diversity-related pages are defined conservatively using the label `Culture.Biography.Women`. Biography pages are also identified using `Culture.Biography.Biography*`.
+This report uses Wikimedia data for English Wikipedia, combining page-level metadata, daily pageviews, and edit logs. Women-related pages were operationalized using the label `Culture.Biography.Women`(probability > 0.20).. Biography pages are also identified using `Culture.Biography.Biography*`.
 
 Our analysis distinguishes between three related dimensions of instability:
 
@@ -145,7 +148,7 @@ save_table_csv <- function(x, filename) {
 #| message: false
 #| warning: false
 topic_colors <- c(
-  "Diversity-related pages" = "#7B61FF",
+  "Women-related pages" = "#7B61FF",
   "Other pages" = "#2BB3B1"
 )
 
@@ -255,7 +258,7 @@ pi_en <- pageinfo_sample %>%
     bio_prob   = map_dbl(predicted_labels, ~ get_label_prob(.x, "Culture.Biography.Biography*")),
     women_topic = women_prob > 0.20,
     biography_topic = bio_prob > 0.50,
-    diversity_topic = women_topic
+    women_related_page = women_topic
   )
 
 pi_en_small <- pi_en %>%
@@ -268,7 +271,7 @@ pi_en_small <- pi_en %>%
     bio_prob,
     women_topic,
     biography_topic,
-    diversity_topic
+    women_related_page
   )
 
 edits_en <- enwiki_sample %>%
@@ -280,7 +283,7 @@ edits_en <- enwiki_sample %>%
     is_revert_action = map_lgl(revision_tags, ~ has_any_tag(.x, c("mw-undo", "mw-rollback", "mw-manual-revert")))
   ) %>%
   left_join(pi_en_small, by = "page_id") %>%
-  filter(!is.na(diversity_topic), !is.na(edit_day))
+  filter(!is.na(women_related_page), !is.na(edit_day))
 
 ```
 
@@ -305,7 +308,7 @@ pv_daily_en <- pv_en %>%
   )
 
 daily_edits <- edits_en %>%
-  group_by(page_id, page_title, diversity_topic, biography_topic, edit_day) %>%
+  group_by(page_id, page_title, women_related_page, biography_topic, edit_day) %>%
   summarise(
     edits_day = n(),
     editors_day = n_distinct(user_text),
@@ -341,7 +344,7 @@ daily_analysis <- daily_edits %>%
   )
 
 page_instability <- daily_analysis %>%
-  group_by(page_id, page_title, diversity_topic, biography_topic) %>%
+  group_by(page_id, page_title, women_related_page, biography_topic) %>%
   summarise(
     n_active_days = n(),
     n_edits = sum(edits_day, na.rm = TRUE),
@@ -368,7 +371,7 @@ This report first examines structural instability at the page level. Here, insta
 #| tbl-cap: "Page-level instability by topic group"
 
 result_pages_all <- page_instability %>%
-  group_by(diversity_topic) %>%
+  group_by(women_related_page) %>%
   summarise(
     n_pages = n(),
     mean_edit_burst = mean(edit_burst, na.rm = TRUE),
@@ -387,7 +390,7 @@ result_pages_all |>
   kable_styling(full_width = FALSE)
 
 ```
-Diversity-related pages show a higher mean edit burst (0.58) than other pages (0.44), indicating stronger concentration of edits. In Figure 1, the horizontal line inside each box marks the median, while the white dot indicates the mean, so the figure visualizes the full distribution rather than the mean alone.
+Women-related page shows a higher mean edit burst (0.58) than other pages (0.44), indicating stronger concentration of edits. In Figure 1, the horizontal line inside each box marks the median, while the white dot indicates the mean, so the figure visualizes the full distribution rather than the mean alone.
 
 ```{r, warning=FALSE, message=FALSE}
 #| message: false
@@ -398,8 +401,8 @@ Diversity-related pages show a higher mean edit burst (0.58) than other pages (0
 p_page_burst <- page_instability %>%
   mutate(
     topic_label = if_else(
-      diversity_topic,
-      "Diversity-related pages",
+      women_related_page,
+      "Women-related pages",
       "Other pages"
     )
   ) %>%
@@ -419,7 +422,7 @@ p_page_burst <- page_instability %>%
     expand = expansion(mult = c(0.02, 0.08))
   ) +
   labs(
-    title = "Structural editing burstiness is higher for diversity-related pages",
+    title = "Structural editing burstiness is higher for women-related pages",
     subtitle = "Page-level edit concentration, measured as the share of all edits occurring on the single most active day",
     x = NULL,
     y = "Edit concentration within page (%)"
@@ -430,26 +433,26 @@ p_page_burst <- page_instability %>%
 p_page_burst
 
 ```
-Diversity-related pages show substantially higher structural burstiness than other pages, not only in terms of the mean but across the entire distribution. As shown in Figure 1, the median edit concentration is also higher for diversity-related pages, indicating that the difference is not driven solely by a small number of extreme cases.
-In addition, the distribution for diversity-related pages is more spread out and places more mass in the upper range, with many pages exhibiting very high levels of concentration.
- This suggests that a larger share of diversity-related pages experience periods where a substantial proportion of edits are concentrated in a single day.
+women-related pages show substantially higher structural burstiness than other pages, not only in terms of the mean but across the entire distribution. As shown in Figure 1, the median edit concentration is also higher for women-related pages, indicating that the difference is not driven solely by a small number of extreme cases.
+In addition, the distribution for women-related pages is more spread out and places more mass in the upper range, with many pages exhibiting very high levels of concentration.
+ This suggests that a larger share of women-related pages experience periods where a substantial proportion of edits are concentrated in a single day.
 
-By contrast, non-diversity pages are more concentrated in the lower range of the distribution, indicating more evenly distributed editing activity across time.
+By contrast, non-women pages are more concentrated in the lower range of the distribution, indicating more evenly distributed editing activity across time.
 
-Taken together, these patterns indicate that the higher mean burstiness observed for diversity-related pages reflects a systematic shift in the distribution, rather than being driven by a small number of outliers.
+Taken together, these patterns indicate that the higher mean burstiness observed for women-related pages reflects a systematic shift in the distribution, rather than being driven by a small number of outliers.
 
 ```{r, warning=FALSE, message=FALSE}
 #| label: 05_hypothesis_tests_page_burst
 #| message: false
 #| warning: false
 
-test_h1_all <- t.test(edit_burst ~ diversity_topic, data = page_instability)
+test_h1_all <- t.test(edit_burst ~ women_related_page, data = page_instability)
 
 ```
 
-A Welch two-sample t-test shows that diversity-related pages exhibit significantly higher structural burstiness ($t = -8.41$, $df = 552.99$, $p < .001$). The mean burstiness is 0.580 for diversity-related pages and 0.440 for non-diversity pages.
+A Welch two-sample t-test shows that women-related pages exhibit significantly higher structural burstiness ($t = -8.41$, $df = 552.99$, $p < .001$). The mean burstiness is 0.580 for women-related pages and 0.440 for non-women pages.
 
-This indicates that diversity-related pages show stronger temporal concentration of editing activity at the page level. **Thus, H1 is strongly supported.**
+This indicates that women-related pages show stronger temporal concentration of editing activity at the page level. **Thus, H1 is strongly supported.**
 ```{r, warning=FALSE, message=FALSE}
 
 ```
@@ -465,7 +468,7 @@ This report next examines instability at the page-day level. This section examin
 #| tbl-cap: "Page-level burst-day rates by topic group"
 
 result_days_all <- page_instability %>%
-  group_by(diversity_topic) %>%
+  group_by(women_related_page) %>%
   summarise(
     n_pages = n(),
     mean_burst_day_rate = mean(burst_day_rate, na.rm = TRUE),
@@ -482,7 +485,7 @@ result_days_all |>
   kable(digits = 3, caption = "Page-level burst-day rates by topic group") |>
   kable_styling(full_width = FALSE)
 ```
-The share of burst days is lower for diversity-related pages (0.8%) than for other pages (1.7%), suggesting that burst events are not more frequent in diversity-related topics.
+The share of burst days is lower for women-related pages (0.8%) than for other pages (1.7%), suggesting that burst events are not more frequent in women-related topics.
 
 Figure 2 compares the mean page-level burst-day rate by topic group. 
 
@@ -492,15 +495,15 @@ Figure 2 compares the mean page-level burst-day rate by topic group.
 
 
 p_burst_day <- page_instability %>%
-  group_by(diversity_topic) %>%
+  group_by(women_related_page) %>%
   summarise(
     burst_day_rate = mean(burst_day_rate, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   mutate(
     topic_label = if_else(
-      diversity_topic,
-      "Diversity-related pages",
+      women_related_page,
+      "Women-related pages",
       "Other pages"
     )
   ) %>%
@@ -518,7 +521,7 @@ p_burst_day <- page_instability %>%
     expand = expansion(mult = c(0, 0.05))
   ) +
   labs(
-    title = "Burst-day rates are not higher for diversity-related pages",
+    title = "Burst-day rates are not higher for women-related pages",
     subtitle = "Mean page-level share of active days classified as burst days",
     x = NULL,
     y = "Mean burst-day rate within page (%)"
@@ -528,26 +531,26 @@ p_burst_day <- page_instability %>%
 
 p_burst_day
 ```
-Contrary to expectations, diversity-related pages exhibit a lower burst-day rate (0.8%) than other pages (1.7%).
+Contrary to expectations, women-related pages exhibit a lower burst-day rate (0.8%) than other pages (1.7%).
 
-This indicates that diversity-related pages are not characterized by more frequent burst events. Instead, burst days are relatively less common within these pages. 
+This indicates that women-related pages are not characterized by more frequent burst events. Instead, burst days are relatively less common within these pages. 
 
-Combined with the results from Figure 1, this suggests that the higher structural burstiness observed in diversity-related pages does not arise from more frequent bursts, but rather from a stronger concentration of edits into a smaller number of days when bursts do occur. In other words, burst events are less frequent but more impactful in diversity-related pages.
+Combined with the results from Figure 1, this suggests that the higher structural burstiness observed in women-related pages does not arise from more frequent bursts, but rather from a stronger concentration of edits into a smaller number of days when bursts do occur. In other words, burst events are less frequent but more impactful in women-related pages.
 
 ```{r, warning=FALSE, message=FALSE}
 #| message: false
 #| warning: false
 #| label: 06_hypothesis_tests_day
 
-test_h2_all <- t.test(burst_day_rate ~ diversity_topic, data = page_instability)
+test_h2_all <- t.test(burst_day_rate ~ women_related_page, data = page_instability)
 
 ```
 
-A Welch two-sample t-test comparing page-level burst-day rates shows that diversity-related pages do not have higher burst-day rates than other pages. Instead, non-diversity pages have a higher average share of active days classified as burst days. This means that diversity-related pages are not characterized by more frequent burst events at the day level, even though they remain more structurally bursty overall.  **Thus, H2 is not supported.**
+A Welch two-sample t-test comparing page-level burst-day rates shows that women-related pages do not have higher burst-day rates than other pages. Instead, non-women pages have a higher average share of active days classified as burst days. This means that women-related pages are not characterized by more frequent burst events at the day level, even though they remain more structurally bursty overall.  **Thus, H2 is not supported.**
 
 ## Revert-related Instability
 
-This section examines whether diversity-related pages show higher levels of revert-related instability. Here, instability is defined as the extent to which edits are reverted, reflecting disagreement and conflict in editorial activity.
+This section examines whether women-related pages show higher levels of revert-related instability. Here, instability is defined as the extent to which edits are reverted, reflecting disagreement and conflict in editorial activity.
 
 Figure 3 compares the mean page-level share of reverted edits across topic groups.
 ```{r, warning=FALSE, message=FALSE}
@@ -556,15 +559,15 @@ Figure 3 compares the mean page-level share of reverted edits across topic group
 
 
 p_revert_topic <- page_instability %>%
-  group_by(diversity_topic) %>%
+  group_by(women_related_page) %>%
   summarise(
     reverted_edit_share = mean(reverted_edit_share, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   mutate(
     topic_label = if_else(
-      diversity_topic,
-      "Diversity-related pages",
+      women_related_page,
+      "Women-related pages",
       "Other pages"
     )
   ) %>%
@@ -592,26 +595,26 @@ p_revert_topic <- page_instability %>%
 
 p_revert_topic
 ```
-The results show that revert-related instability is nearly identical between diversity-related pages (0.174) and other pages (0.179). 
+The results show that revert-related instability is nearly identical between women-related pages (0.174) and other pages (0.179). 
 
-This indicates that diversity-related pages are not characterized by higher levels of editorial conflict, as measured by the proportion of edits that are undone. In other words, disagreement and direct contestation do not appear to be more prevalent in these pages.
+This indicates that women-related pages are not characterized by higher levels of editorial conflict, as measured by the proportion of edits that are undone. In other words, disagreement and direct contestation do not appear to be more prevalent in these pages.
 
-Taken together with the results from Figures 1 and 2, this finding suggests that the instability observed in diversity-related pages is not driven by conflict-based mechanisms such as reverts. Instead, it is more consistent with temporal concentration dynamics, where edits are clustered into specific periods without necessarily involving higher levels of disagreement.
+Taken together with the results from Figures 1 and 2, this finding suggests that the instability observed in women-related pages is not driven by conflict-based mechanisms such as reverts. Instead, it is more consistent with temporal concentration dynamics, where edits are clustered into specific periods without necessarily involving higher levels of disagreement.
 
 ```{r, warning=FALSE, message=FALSE}
 #| label: 07_hypothesis_tests_revert
 #| message: false
 #| warning: false
 
-test_h3_all <- t.test(reverted_edit_share ~ diversity_topic, data = page_instability)
+test_h3_all <- t.test(reverted_edit_share ~ women_related_page, data = page_instability)
 ```
-A Welch two-sample t-test shows no statistically significant difference in the mean share of reverted edits between diversity-related and non-diversity pages ($t = 0.36$, $df = 540.6$, $p = .716$). The mean reverted edit share is 0.179 for non-diversity pages and 0.174 for diversity-related pages.
+A Welch two-sample t-test shows no statistically significant difference in the mean share of reverted edits between women-related and non-women pages ($t = 0.36$, $df = 540.6$, $p = .716$). The mean reverted edit share is 0.179 for non-women pages and 0.174 for women-related pages.
 
-This indicates that diversity-related pages are not more revert-prone than other pages. **Thus, H3 is not supported.**
+This indicates that women-related pages are not more revert-prone than other pages. **Thus, H3 is not supported.**
 
 ## Mitigation Strategies
 
-This study focuses on mitigating **structural instability**, as this is the primary dimension along which diversity-related pages differ from other pages. 
+This study focuses on mitigating **structural instability**, as this is the primary dimension along which women-related pages differ from other pages. 
 Because no systematic differences are observed in revert-related instability, mitigation efforts are directed toward reducing the concentration of edits over time.
 
 The following burst-focused strategies are evaluated:
@@ -633,7 +636,7 @@ daily_trimmed <- daily_analysis %>%
   filter(!burst_day)
 
 daily_trimmed_page <- daily_trimmed %>%
-  group_by(page_id, page_title, diversity_topic, biography_topic) %>%
+  group_by(page_id, page_title, women_related_page, biography_topic) %>%
   summarise(
     n_active_days = n(),
     n_edits = sum(edits_day, na.rm = TRUE),
@@ -656,7 +659,7 @@ Table 3 compares instability measures across mitigation strategies.
 
 mitigation_compare <- bind_rows(
   page_instability %>%
-    group_by(diversity_topic) %>%
+    group_by(women_related_page) %>%
     summarise(
       design = "raw",
       mean_edit_burst = mean(edit_burst, na.rm = TRUE),
@@ -664,7 +667,7 @@ mitigation_compare <- bind_rows(
       .groups = "drop"
     ),
   page_burst_weighted %>%
-    group_by(diversity_topic) %>%
+    group_by(women_related_page) %>%
     summarise(
       design = "topic_burst_weighted",
       mean_edit_burst = weighted.mean(edit_burst, weight_burst, na.rm = TRUE),
@@ -672,7 +675,7 @@ mitigation_compare <- bind_rows(
       .groups = "drop"
     ),
   daily_trimmed_page %>%
-    group_by(diversity_topic) %>%
+    group_by(women_related_page) %>%
     summarise(
       design = "event_day_trimmed",
       mean_edit_burst = mean(edit_burst, na.rm = TRUE),
@@ -680,7 +683,7 @@ mitigation_compare <- bind_rows(
       .groups = "drop"
     ),
   page_combined %>%
-    group_by(diversity_topic) %>%
+    group_by(women_related_page) %>%
     summarise(
       design = "combined",
       mean_edit_burst = weighted.mean(edit_burst, weight_combined, na.rm = TRUE),
@@ -692,8 +695,8 @@ mitigation_compare <- bind_rows(
 mitigation_compare_pretty <- mitigation_compare %>%
   mutate(
     topic_label = if_else(
-      diversity_topic,
-      "Diversity-related pages",
+      women_related_page,
+      "Women-related pages",
       "Other pages"
     ),
    design = recode(
@@ -758,23 +761,23 @@ p_mit_burst
 ```
 Importantly, the reduction is observed across both topic groups, indicating that structural instability is not confined to a specific subset of pages but reflects a broader feature of editing dynamics.
 
-At the same time, the relative difference between diversity-related and other pages remains visible under burst weighting, event-day trimming, and the combined design.
+At the same time, the relative difference between women-related and other pages remains visible under burst weighting, event-day trimming, and the combined design.
 
-In other words, the higher level of structural burstiness in diversity-related pages does not appear to be driven solely by a small number of extreme observations. Instead, it reflects a more general pattern in how editing activity is distributed over time within these pages.
+In other words, the higher level of structural burstiness in women-related pages does not appear to be driven solely by a small number of extreme observations. Instead, it reflects a more general pattern in how editing activity is distributed over time within these pages.
 
 
 
 ## Discussion and Conclusion
 
-This study examined whether diversity-related Wikipedia pages are more unstable than other pages, and whether that instability can be understood as a data quality issue.
+This study examined whether women-related Wikipedia pages are more unstable than other pages, and whether that instability can be understood as a data quality issue.
 
 The results provide **dimension-specific evidence**.
 
-First, diversity-related pages are significantly more bursty at the page level. **H1 is strongly supported.** This indicates that editing activity is more temporally concentrated for these pages, suggesting a form of structural, topic-related instability.
+First, women-related pages are significantly more bursty at the page level. **H1 is strongly supported.** This indicates that editing activity is more temporally concentrated for these pages, suggesting a form of structural, topic-related instability.
 
-Second, the burst-day analysis **does not support H2.** Diversity-related pages do not show a higher page-level burst-day rate, meaning that a larger share of their active days is not classified as burst days under the current page-relative definition. Their higher instability therefore appears to stem more from overall concentration of edits into a few days than from more frequent burst days.
+Second, the burst-day analysis **does not support H2.** Women-related pages do not show a higher page-level burst-day rate, meaning that a larger share of their active days is not classified as burst days under the current page-relative definition. Their higher instability therefore appears to stem more from overall concentration of edits into a few days than from more frequent burst days.
 
-Third, we do not find evidence that diversity-related pages have a higher reverted edit share. **H3 is therefore not supported.** This suggests that instability in these pages is not primarily driven by overt revert conflict.
+Third, we do not find evidence that women-related pages have a higher reverted edit share. **H3 is therefore not supported.** This suggests that instability in these pages is not primarily driven by overt revert conflict.
 
 ### Dimensions of Instability
 
@@ -789,19 +792,19 @@ Taken together, these findings suggest that instability in Wikipedia has three d
 - **Revert-related instability**  
   capturing editorial conflict, reflected in the share of reverted edits  
 
-These dimensions are related but empirically distinct. Diversity-related pages appear especially prone to structural instability, but not to higher levels of temporal or revert-related instability.
+These dimensions are related but empirically distinct. Women-related pages appear especially prone to structural instability, but not to higher levels of temporal or revert-related instability.
 
 
 ### Mitigation Implications
 
-The mitigation analysis focuses on structural instability, which is the primary source of instability observed in diversity-related pages. Burst-focused strategies effectively reduce edit concentration. Revert-related instability is not targeted because it does not differ systematically between topic groups.
+The mitigation analysis focuses on structural instability, which is the primary source of instability observed in women-related pages. Burst-focused strategies effectively reduce edit concentration. Revert-related instability is not targeted because it does not differ systematically between topic groups.
 
 ### Summary of Findings
 
 The hypotheses (H1–H3) jointly address RQ1 and RQ2 by capturing different dimensions of instability, while RQ3 is examined through a mitigation analysis.
 
-- **RQ1: Are diversity-related pages more unstable?**  
-  → Yes, but specifically in terms of structural instability. Diversity-related pages exhibit higher edit concentration, indicating stronger temporal clustering of editing activity. This is consistent with **H1 (supported)**, while **H2 and H3 are not supported**.
+- **RQ1: Are women-related pages more unstable?**  
+  → Yes, but specifically in terms of structural instability. Women-related pages exhibit higher edit concentration, indicating stronger temporal clustering of editing activity. This is consistent with **H1 (supported)**, while **H2 and H3 are not supported**.
 
 - **RQ2: Does instability arise primarily from temporal concentration or editorial conflict?**  
   → Instability is primarily **driven by temporal concentration** rather than editorial conflict. The lack of differences in revert-related instability (**H3 not supported**) indicates that disagreement is not the main driver, while the strong evidence for structural burstiness (**H1 supported**) points to temporal concentration as the dominant mechanism.
@@ -809,16 +812,20 @@ The hypotheses (H1–H3) jointly address RQ1 and RQ2 by capturing different dime
 - **RQ3: Can instability be mitigated, and how?**  
   → Yes, primarily through burst-focused strategies that reduce structural instability. In particular, event-day trimming and the combined design reduce edit concentration more directly than alternative approaches.
 
-Overall, these findings show that instability in diversity-related pages is best understood as a form of temporal concentration rather than conflict-driven volatility, and that mitigation strategies can reduce but not fully eliminate this pattern.
+Overall, these findings show that instability in women-related pages is best understood as a form of temporal concentration rather than conflict-driven volatility, and that mitigation strategies can reduce but not fully eliminate this pattern.
 
 ### Implications for Data Quality
 
-From the perspective of the Total Error Framework, these forms of instability can be understood as sources of uncertainty in how Wikipedia content is measured and observed over time. Structural instability is especially relevant because concentrated editing episodes may distort the observed state of a page at a given moment, even without overt conflict. In this sense, instability is not simply platform noise, but a data quality issue that affects the reliability of inference.
+From a measurement perspective, the forms of instability identified in this study represent sources of uncertainty in the observed values of Wikipedia content over time. Instability is therefore not merely platform noise, but a data quality issue that affects how reliably observed page states reflect underlying content.
 
-Importantly, the results suggest that different forms of instability correspond to different components of the error framework.
-Revert-related instability aligns with observable disagreement and correction processes, whereas structural instability reflects temporal irregularities in data generation through the concentration of edits across time.
+Structural instability is particularly important, as concentrated editing episodes can distort the observed state of a page at a given moment. Pages captured during such periods may not reflect stable underlying content.
 
-As emphasized in the Total Error Framework, errors are not necessarily mistakes but sources of uncertainty. From this perspective, Wikipedia editing dynamics introduce structured uncertainty into the data, which has implications for how reliably such data can be used for analysis.
+Temporal and revert-related instability capture different forms of measurement-related uncertainty: the former reflects irregular editing patterns over time, while the latter reflects observable disagreement and correction processes. These do not imply that the data are incorrect, but that observed values may deviate from a more stable underlying state.
+
+Overall, instability introduces structured measurement-related uncertainty into Wikipedia data, with important implications for the reliability of downstream analyses.
+
+### Future Research
+Future research could extend this analysis by comparing results between men- and women-related pages, as well as across different types of topics.
 
 ## References {.appendix}
 
